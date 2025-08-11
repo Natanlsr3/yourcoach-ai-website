@@ -1,0 +1,43 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tête du coureur -->
+  <circle cx="30" cy="18" r="8" fill="currentColor"/>
+  
+  <!-- Corps principal -->
+  <path d="M22 28 
+           C18 30, 15 35, 15 40 
+           L15 45 
+           C15 48, 17 50, 20 50 
+           L25 50 
+           L30 65 
+           L32 85 
+           C32 88, 34 90, 37 90 
+           C40 90, 42 88, 42 85 
+           L40 65 
+           L48 50 
+           L53 50 
+           C56 50, 58 48, 58 45 
+           L58 40 
+           C58 35, 55 30, 51 28 
+           L45 28 
+           L42 35 
+           L30 35 
+           L27 28 
+           Z" 
+        fill="currentColor"/>
+  
+  <!-- Bras en action -->
+  <path d="M22 32 L12 38 C10 39, 10 41, 12 42 C14 43, 16 41, 16 39 L22 35" fill="currentColor" opacity="0.9"/>
+  <path d="M51 32 L61 25 C63 24, 65 26, 64 28 C63 30, 61 30, 59 29 L51 35" fill="currentColor" opacity="0.9"/>
+  
+  <!-- Jambes dynamiques -->
+  <path d="M30 65 L25 78 C24 81, 26 83, 29 82 C32 81, 31 78, 30 75 L30 65" fill="currentColor"/>
+  <path d="M40 65 L45 78 C46 81, 44 83, 41 82 C38 81, 39 78, 40 75 L40 65" fill="currentColor"/>
+  
+  <!-- Lignes de vitesse -->
+  <g stroke="currentColor" strokeWidth="2" fill="none" opacity="0.5">
+    <line x1="5" y1="25" x2="12" y2="26"/>
+    <line x1="3" y1="35" x2="10" y2="36"/>
+    <line x1="5" y1="45" x2="12" y2="46"/>
+    <line x1="7" y1="55" x2="14" y2="56"/>
+  </g>
+</svg>
