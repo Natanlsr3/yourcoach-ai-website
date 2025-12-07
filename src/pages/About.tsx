@@ -196,6 +196,7 @@ const About = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {team.map((member, index) => {
+                // Mapping des photos des membres de l'équipe
                 const imageSrc =
                   member.name === "Natan Lasar" ? "/coach-natan.png" :
                   member.name === "Amandine Garlopeau" ? "/coach-amandine.png" :
