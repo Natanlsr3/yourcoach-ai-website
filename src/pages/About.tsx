@@ -13,6 +13,7 @@ import {
   Globe,
   TrendingUp
 } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 
 const About = () => {
@@ -55,7 +56,7 @@ const About = () => {
       expertise: "3D & Animation"
     },
     {
-      name: "Ahmed El Habib",
+      name: "Walid El Ghouti",
       role: "Head of AI",
       background: "Ingénieur numérique, spécialisé en recherche sur les modèles de langage (LLM)",
       expertise: "Intelligence Artificielle & LLM"
@@ -63,7 +64,7 @@ const About = () => {
     {
       name: "Roman Pierrard",
       role: "Expert Collaborateur",
-      background: "Coach sportif et joueur de football professionnel",
+      background: "Préparateur physique et joueur de football professionnel",
       expertise: "Sport & Performance"
     },
     {
@@ -83,6 +84,12 @@ const About = () => {
       role: "Expert Collaborateur",
       background: "Enseignant en STAPS, agrégé d'EPS et entraîneur de rugby",
       expertise: "Formation sportive & Rugby"
+    },
+    {
+      name: "Amandine Garlopeau",
+      role: "Expert Collaborateur",
+      background: "Coach sportive et nutritionniste",
+      expertise: "Sport & Nutrition"
     }
   ];
 
@@ -188,21 +195,42 @@ const About = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                                           {team.map((member, index) => (
+              {team.map((member, index) => {
+                const imageSrc =
+                  member.name === "Natan Lasar" ? "/coach-natan.png" :
+                  member.name === "Amandine Garlopeau" ? "/coach-amandine.png" :
+                  member.name === "Claire de Labachelerie" ? "/coach-claire.png" :
+                  member.name === "Roman Pierrard" ? "/coach-roman.png" :
+                  member.name === "Antoine Cerino" ? "/coach-antoine.png" :
+                  member.name === "Thomas Raposo" ? "/coach-thomas.png" :
+                  member.name === "Walid El Ghouti" ? "/coach-walid.png" :
+                  undefined;
+
+                return (
                   <Card key={index} className="border-border text-center">
-                  <CardHeader>
-                    <div className="w-20 h-20 mx-auto bg-gradient-primary rounded-full flex items-center justify-center mb-4">
-                      <Users className="w-10 h-10 text-primary-foreground" />
-                    </div>
-                    <CardTitle className="text-xl">{member.name}</CardTitle>
-                    <div className="text-accent font-medium">{member.role}</div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm mb-2">{member.background}</p>
-                    <p className="text-foreground text-sm font-medium">{member.expertise}</p>
-                  </CardContent>
-                </Card>
-              ))}
+                    <CardHeader>
+                      <div className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4">
+                        {imageSrc ? (
+                          <Avatar className="w-32 h-32">
+                            <AvatarImage src={imageSrc} alt={member.name} />
+                            <AvatarFallback>{member.name.substring(0, 1)}</AvatarFallback>
+                          </Avatar>
+                        ) : (
+                          <div className="w-32 h-32 mx-auto bg-gradient-primary rounded-full flex items-center justify-center">
+                            <Users className="w-16 h-16 text-primary-foreground" />
+                          </div>
+                        )}
+                      </div>
+                      <CardTitle className="text-xl">{member.name}</CardTitle>
+                      <div className="text-accent font-medium">{member.role}</div>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground text-sm mb-2">{member.background}</p>
+                      <p className="text-foreground text-sm font-medium">{member.expertise}</p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </section>
