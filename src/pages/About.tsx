@@ -200,6 +200,7 @@ const About = () => {
                 const imageSrc =
                   member.name === "Natan Lasar" ? "/coach-natan.png" :
                   member.name === "Amandine Garlopeau" ? "/coach-amandine.png" :
+                  member.name === "Raphaël Touitou" ? "/coach-raphael.png" :
                   member.name === "Claire de Labachelerie" ? "/coach-claire.png" :
                   member.name === "Roman Pierrard" ? "/coach-roman.png" :
                   member.name === "Antoine Cerino" ? "/coach-antoine.png" :
