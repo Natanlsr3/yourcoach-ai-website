@@ -207,13 +207,15 @@ const About = () => {
                   member.name === "Thomas Raposo" ? "/coach-thomas.png" :
                   member.name === "Walid El Ghouti" ? "/coach-walid.png" :
                   undefined;
+                const avatarSize =
+                  member.name === "Raphaël Touitou" ? "w-28 h-28" : "w-32 h-32";
 
                 return (
                   <Card key={index} className="border-border text-center">
                     <CardHeader>
-                      <div className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4">
+                      <div className={`${avatarSize} mx-auto rounded-full overflow-hidden mb-4`}>
                         {imageSrc ? (
-                          <Avatar className="w-32 h-32">
+                          <Avatar className={avatarSize}>
                             <AvatarImage src={imageSrc} alt={member.name} />
                             <AvatarFallback>{member.name.substring(0, 1)}</AvatarFallback>
                           </Avatar>
