@@ -471,10 +471,10 @@ const Solution = () => {
           <div style={{ position: "absolute", top: "16px", left: "16px", zIndex: 10, fontSize: "10px", color: "rgba(0,0,0,0.2)", fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif" }}>VERSION C</div>
 
           {([
-            { img: "/relation_de_confiance.png",   title: "Relation de confiance",        text: "Un coach qui vous connaît, s'adapte et crée un vrai lien dans la durée." },
-            { img: "/IAxcoachs.png",               title: "IA × Coachs & Médecins",       text: "Algorithmes co-construits avec des experts. Chaque recommandation validée." },
-            { img: "/homme-progres-gym.png",       title: "Évolue à chaque séance",       text: "Le coach apprend de chaque session. Plus vous l'utilisez, plus il vous connaît." },
-            { img: "/demonstration-mouvement.png", title: "Démonstration des mouvements", text: "Chaque exercice démontré en temps réel par l'avatar 3D pour une exécution parfaite." },
+            { img: "/relation_de_confiance.jpg",   title: "Relation de confiance",        text: "Un coach qui vous connaît, s'adapte et crée un vrai lien dans la durée." },
+            { img: "/IAxcoachs.jpg",               title: "IA × Coachs & Médecins",       text: "Algorithmes co-construits avec des experts. Chaque recommandation validée." },
+            { img: "/homme-progres-gym.jpg",       title: "Évolue à chaque séance",       text: "Le coach apprend de chaque session. Plus vous l'utilisez, plus il vous connaît." },
+            { img: "/demonstration-mouvement.jpg", title: "Démonstration des mouvements", text: "Chaque exercice démontré en temps réel par l'avatar 3D pour une exécution parfaite." },
           ] as const).map((card) => (
             <div
               key={card.title}
@@ -628,7 +628,7 @@ const Solution = () => {
                 {/* Image de fond conditionnelle */}
                 {(card.id === "Hôtel" || card.id === "Salle de sport" || card.id === "Entreprise") && (() => {
                   const imgSrc = card.id === "Hôtel"
-                    ? "/spa_hotel_luxe.png"
+                    ? "/spa_hotel_luxe.jpg"
                     : card.id === "Salle de sport"
                       ? "/gym-salle.jpg"
                       : "/entreprise.jpg";
@@ -757,13 +757,13 @@ const Solution = () => {
 
               {/* Photo gauche — gym */}
               <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
-                <img src="/Gym_hotel_luxe.png" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block", transform: `scale(${1 + sectionProgress * 0.05})`, transition: "transform 0.1s linear" }} />
+                <img src="/Gym_hotel_luxe.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block", transform: `scale(${1 + sectionProgress * 0.05})`, transition: "transform 0.1s linear" }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(8,8,12,0.55) 0%, rgba(8,8,12,0.35) 100%)" }} />
               </div>
 
               {/* Photo droite — spa */}
               <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
-                <img src="/spa_hotel_luxe.png" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block", transform: `scale(${1 + sectionProgress * 0.05})`, transition: "transform 0.1s linear" }} />
+                <img src="/spa_hotel_luxe.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block", transform: `scale(${1 + sectionProgress * 0.05})`, transition: "transform 0.1s linear" }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to left, rgba(8,8,12,0.55) 0%, rgba(8,8,12,0.35) 100%)" }} />
               </div>
             </div>
