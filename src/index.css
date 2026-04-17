@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
+
+@layer base {
+  :root {
+    /* Fonds */
+    --background: 36 20% 97%;          /* #f9f7f4 crème très clair */
+    --background-alt: 36 15% 94%;      /* #f0ece5 crème légèrement plus sombre */
+    --foreground: 220 15% 12%;         /* #1a1d23 quasi-noir bleuté */
+
+    /* Cards & surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 12%;
+
+    /* Primary — Bleu clair */
+    --primary: 210 85% 58%;            /* #3b9eff bleu clair vif */
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 210 90% 72%;
+    --primary-pale: 210 80% 93%;
+
+    /* Accent — Beige/orangé chaud */
+    --accent: 28 75% 58%;              /* #e07a35 orangé chaud */
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 28 80% 68%;
+    --accent-pale: 28 70% 93%;
+
+    /* Neutres */
+    --secondary: 36 20% 94%;
+    --secondary-foreground: 220 15% 12%;
+    --muted: 36 15% 91%;
+    --muted-foreground: 220 10% 48%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 36 15% 88%;
+    --input: 36 15% 88%;
+    --ring: 210 85% 58%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(145deg, hsl(210 80% 93%) 0%, hsl(36 50% 94%) 50%, hsl(28 60% 93%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(210 85% 58%) 0%, hsl(210 90% 68%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(28 75% 58%) 0%, hsl(28 80% 68%) 100%);
+
+    /* Glassmorphism — fond clair */
+    --glass-bg: rgba(255, 255, 255, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.85);
+    --glass-blur: blur(20px);
+    --glass-shadow: 0 8px 32px rgba(60, 80, 120, 0.10);
+
+    /* Ombres */
+    --shadow-soft: 0 4px 20px rgba(60, 100, 180, 0.08);
+    --shadow-medium: 0 8px 32px rgba(60, 100, 180, 0.12);
+    --shadow-strong: 0 20px 60px rgba(60, 100, 180, 0.16);
+    --shadow-accent: 0 8px 30px rgba(224, 122, 53, 0.25);
+
+    --radius: 0.75rem;
+
+    /* Design tokens — pages */
+    --page-bg: #f9f7f4;
+    --page-bg-alt: #f0ece5;
+    --card-bg: rgba(255,255,255,0.55);
+    --card-border: rgba(255,255,255,0.85);
+    --card-border-hover: rgba(255,255,255,0.95);
+    --text-primary: hsl(220 15% 12%);
+    --text-secondary: hsl(220 10% 48%);
+    --text-muted: hsl(220 10% 62%);
+    --label-color: hsl(210 85% 55%);
+    --accent-pill-bg: rgba(59,158,255,0.07);
+    --accent-pill-border: rgba(59,158,255,0.18);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ── Canvas gradient global — fond continu ───────────────── */
+body {
+  background: linear-gradient(
+    145deg,
+    #dceffe 0%,
+    #f0ece5 50%,
+    #faeadb 100%
+  );
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  min-height: 100vh;
+}
+
+/* Fallback mobile Safari — fixed attachment non supporté */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+}
+
+/* ── Glass card — fond clair ─────────────────────────────── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 18px;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.glass-card:hover {
+  box-shadow: 0 12px 40px rgba(60, 100, 180, 0.15);
+  border-color: rgba(255,255,255,0.95);
+}
+
+/* Glass card bleue */
+.glass-card-blue {
+  background: rgba(59, 158, 255, 0.08);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(59, 158, 255, 0.22);
+  box-shadow: 0 8px 32px rgba(59, 158, 255, 0.10);
+  border-radius: 18px;
+}
+
+/* Glass card orangée */
+.glass-card-warm {
+  background: rgba(224, 122, 53, 0.07);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(224, 122, 53, 0.20);
+  box-shadow: 0 8px 32px rgba(224, 122, 53, 0.08);
+  border-radius: 18px;
+}
+
+/* Pill badge */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.85);
+  border-radius: 24px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: hsl(220 15% 25%);
+}
+
+.pill-blue {
+  background: rgba(59, 158, 255, 0.10);
+  border-color: rgba(59, 158, 255, 0.25);
+  color: hsl(210 85% 40%);
+}
+
+.pill-warm {
+  background: rgba(224, 122, 53, 0.10);
+  border-color: rgba(224, 122, 53, 0.25);
+  color: hsl(28 75% 38%);
+}
+
+/* Section label */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: hsl(210 85% 55%);
+  display: block;
+  margin-bottom: 16px;
+  font-family: -apple-system, sans-serif;
+}
+
+/* Serif title */
+.serif-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  color: hsl(220 15% 12%);
+}
