@@ -643,7 +643,7 @@ const Solution = () => {
                         height: "100%",
                         objectFit: "cover",
                         objectPosition: "center",
-                        opacity: isAct || isHov ? 0.72 : 0.55,
+                        opacity: isAct || isHov ? 0.85 : 0.75,
                         transition: "opacity 0.4s ease",
                         pointerEvents: "none",
                       }}
