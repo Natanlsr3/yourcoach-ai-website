@@ -8,9 +8,7 @@ const Footer = () => {
   return (
     <footer style={{ margin: "0 24px 24px", fontFamily: sans }}>
       <div style={{
-        background: "rgba(15,23,42,0.92)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
+        background: "#0A0E3D",
         borderRadius: "24px",
         overflow: "hidden",
       }}>
@@ -21,7 +19,7 @@ const Footer = () => {
             <div>
               <Link to="/" style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "16px", textDecoration: "none" }}>
                 <div style={{ width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <LogoIcon className="w-6 h-6" style={{ color: "#3b9eff" }} />
+                  <LogoIcon className="w-6 h-6" style={{ color: "#F5F1EA" }} />
                 </div>
                 <span style={{ fontWeight: 700, fontSize: "20px", color: "rgba(255,255,255,0.90)" }}>
                   YourCoach<span style={{ color: "#3b9eff" }}> AI</span>

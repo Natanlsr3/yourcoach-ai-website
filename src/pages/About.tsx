@@ -16,8 +16,8 @@ const glassCard: React.CSSProperties = {
   background: "rgba(255,255,255,0.55)",
   backdropFilter: "blur(20px)",
   WebkitBackdropFilter: "blur(20px)",
-  border: "1px solid rgba(255,255,255,0.85)",
-  boxShadow: "0 8px 32px rgba(60,80,120,0.10)",
+  border: "1px solid rgba(255,255,255,0.70)",
+  boxShadow: "0 8px 32px rgba(10,14,61,0.08)",
   borderRadius: 20,
 };
 
@@ -111,7 +111,7 @@ const About = () => {
                 style={{
                   fontFamily: "'DM Serif Display', Georgia, serif",
                   fontSize: 64,
-                  color: "#0f172a",
+                  color: "#1A1D24",
                   letterSpacing: "-2.5px",
                   lineHeight: 1.05,
                   marginBottom: 24,
@@ -122,7 +122,7 @@ const About = () => {
               <p
                 style={{
                   fontSize: 18,
-                  color: "rgba(15,23,42,0.5)",
+                  color: "#717A8A",
                   maxWidth: 560,
                   margin: "0 auto",
                   lineHeight: 1.6,
@@ -152,10 +152,10 @@ const About = () => {
                 >
                   01
                 </span>
-                <h3 style={{ fontSize: 24, fontWeight: 700, color: "#0f172a", marginBottom: 16 }}>
+                <h3 style={{ fontSize: 24, fontWeight: 700, color: "#1A1D24", marginBottom: 16 }}>
                   Notre Mission
                 </h3>
-                <p style={{ fontSize: 17, color: "rgba(15,23,42,0.55)", lineHeight: 1.7 }}>
+                <p style={{ fontSize: 17, color: "#717A8A", lineHeight: 1.7 }}>
                   Démocratiser l'accès à un coaching bien-être premium pour chaque client d'hôtel,
                   quels que soient sa langue, son niveau ou ses contraintes. Nous croyons que le
                   bien-être de qualité ne doit plus être réservé à une élite.
@@ -175,10 +175,10 @@ const About = () => {
                 >
                   02
                 </span>
-                <h3 style={{ fontSize: 24, fontWeight: 700, color: "#0f172a", marginBottom: 16 }}>
+                <h3 style={{ fontSize: 24, fontWeight: 700, color: "#1A1D24", marginBottom: 16 }}>
                   Notre Vision
                 </h3>
-                <p style={{ fontSize: 17, color: "rgba(15,23,42,0.55)", lineHeight: 1.7 }}>
+                <p style={{ fontSize: 17, color: "#717A8A", lineHeight: 1.7 }}>
                   Devenir la référence mondiale du coaching IA dans l'hôtellerie de luxe.
                   Un monde où chaque établissement peut offrir une expérience bien-être
                   personnalisée et accessible, sans contrainte opérationnelle.
@@ -196,7 +196,7 @@ const About = () => {
                 style={{
                   fontFamily: "'DM Serif Display', Georgia, serif",
                   fontSize: 48,
-                  color: "#0f172a",
+                  color: "#1A1D24",
                   letterSpacing: "-1.5px",
                   lineHeight: 1.1,
                   marginBottom: 16,
@@ -204,7 +204,7 @@ const About = () => {
               >
                 Nos valeurs
               </h2>
-              <p style={{ fontSize: 18, color: "rgba(15,23,42,0.5)", maxWidth: 560, margin: "0 auto" }}>
+              <p style={{ fontSize: 18, color: "#717A8A", maxWidth: 560, margin: "0 auto" }}>
                 Les principes qui guident chaque décision et chaque innovation
               </p>
             </div>
@@ -245,10 +245,10 @@ const About = () => {
                       style={{ color: "#1a56db", opacity: 0.6 }}
                     />
                   </div>
-                  <h3 style={{ fontSize: 17, fontWeight: 700, color: "#0f172a", marginBottom: 10 }}>
+                  <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1A1D24", marginBottom: 10 }}>
                     {value.title}
                   </h3>
-                  <p style={{ fontSize: 14, color: "rgba(15,23,42,0.5)", lineHeight: 1.6 }}>
+                  <p style={{ fontSize: 14, color: "#717A8A", lineHeight: 1.6 }}>
                     {value.description}
                   </p>
                 </div>
@@ -265,7 +265,7 @@ const About = () => {
                 style={{
                   fontFamily: "'DM Serif Display', Georgia, serif",
                   fontSize: 48,
-                  color: "#0f172a",
+                  color: "#1A1D24",
                   letterSpacing: "-1.5px",
                   lineHeight: 1.1,
                   marginBottom: 16,
@@ -273,7 +273,7 @@ const About = () => {
               >
                 Notre équipe
               </h2>
-              <p style={{ fontSize: 18, color: "rgba(15,23,42,0.5)" }}>
+              <p style={{ fontSize: 18, color: "#717A8A" }}>
                 Des experts passionnés au service de votre succès
               </p>
             </div>
@@ -320,16 +320,16 @@ const About = () => {
                         </div>
                       )}
                     </div>
-                    <h3 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>
+                    <h3 style={{ fontSize: 18, fontWeight: 700, color: "#1A1D24", marginBottom: 4 }}>
                       {member.name}
                     </h3>
                     <div style={{ fontSize: 13, color: "#1a56db", fontWeight: 600, marginBottom: 12 }}>
                       {member.role}
                     </div>
-                    <p style={{ fontSize: 13, color: "rgba(15,23,42,0.5)", lineHeight: 1.5, marginBottom: 6 }}>
+                    <p style={{ fontSize: 13, color: "#717A8A", lineHeight: 1.5, marginBottom: 6 }}>
                       {member.background}
                     </p>
-                    <p style={{ fontSize: 13, fontWeight: 600, color: "#0f172a" }}>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: "#1A1D24" }}>
                       {member.expertise}
                     </p>
                   </div>
@@ -347,7 +347,7 @@ const About = () => {
                 style={{
                   fontFamily: "'DM Serif Display', Georgia, serif",
                   fontSize: 32,
-                  color: "#0f172a",
+                  color: "#1A1D24",
                   letterSpacing: "-1px",
                   textAlign: "center",
                   marginBottom: 32,
@@ -366,7 +366,7 @@ const About = () => {
                   key={i}
                   style={{
                     fontSize: 17,
-                    color: "rgba(15,23,42,0.55)",
+                    color: "#717A8A",
                     lineHeight: 1.7,
                     marginBottom: i < 4 ? 24 : 0,
                   }}
@@ -382,7 +382,7 @@ const About = () => {
         <section style={{ padding: "0 40px 80px" }}>
           <div
             style={{
-              background: "#0f172a",
+              background: "#0A0E3D",
               borderRadius: 24,
               padding: "80px 40px",
               textAlign: "center",
@@ -394,7 +394,7 @@ const About = () => {
               style={{
                 fontFamily: "'DM Serif Display', Georgia, serif",
                 fontSize: 42,
-                color: "#ffffff",
+                color: "#F5F1EA",
                 letterSpacing: "-1.5px",
                 lineHeight: 1.1,
                 marginBottom: 20,
@@ -402,7 +402,7 @@ const About = () => {
             >
               Rejoignez l'aventure
             </h2>
-            <p style={{ fontSize: 18, color: "rgba(255,255,255,0.6)", marginBottom: 36 }}>
+            <p style={{ fontSize: 18, color: "rgba(245,241,234,0.6)", marginBottom: 36 }}>
               Découvrez comment YourCoach AI peut transformer votre établissement
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -429,7 +429,7 @@ const About = () => {
                   backdropFilter: "blur(16px)",
                   WebkitBackdropFilter: "blur(16px)",
                   color: "#fff",
-                  border: "1px solid rgba(255,255,255,0.25)",
+                  border: "1px solid rgba(255,255,255,0.12)",
                   borderRadius: 12,
                   fontWeight: 600,
                   padding: "14px 32px",

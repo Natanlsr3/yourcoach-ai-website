@@ -3,15 +3,11 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { 
-  CheckCircle, 
-  TrendingUp, 
-  Users, 
-  Zap, 
-  BarChart3, 
-  Shield,
-  Clock,
-  Globe,
+import {
+  CheckCircle,
+  TrendingUp,
+  Users,
+  Zap,
   Sparkles
 } from "lucide-react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
@@ -66,15 +62,14 @@ const Avantages = () => {
       <Header />
       <main id="main" className="pt-16">
         {/* Hero Section */}
-        <section className="relative py-20 bg-gradient-hero text-primary-foreground">
+        <section className="relative py-20" style={{ background: "transparent" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
-
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Avantages <span className="text-accent">concrets</span> pour votre hôtel
+              <h1 className="text-4xl md:text-6xl font-bold mb-6" style={{ color: "#1A1D24" }}>
+                Avantages <span style={{ color: "#3B9EFF" }}>concrets</span> pour votre hôtel
               </h1>
-              <p className="text-xl md:text-2xl text-primary-foreground/80 mb-8">
-                Découvrez pourquoi les établissements de prestige choisissent YourCoach AI 
+              <p className="text-xl md:text-2xl mb-8" style={{ color: "#717A8A" }}>
+                Découvrez pourquoi les établissements de prestige choisissent YourCoach AI
                 pour transformer leur offre bien-être.
               </p>
             </div>
@@ -82,29 +77,35 @@ const Avantages = () => {
         </section>
 
         {/* Benefits Grid */}
-        <section className="py-20 bg-background">
+        <section className="py-20" style={{ background: "transparent" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#1A1D24" }}>
                 5 avantages majeurs
               </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              <p className="text-xl max-w-3xl mx-auto" style={{ color: "#717A8A" }}>
                 Des bénéfices concrets pour votre établissement
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {benefits.map((benefit, index) => (
-                <Card key={index} className="border-border hover:shadow-medium transition-all duration-300 group">
+                <Card
+                  key={index}
+                  className="glass-card hover:shadow-medium transition-all duration-300 group"
+                >
                   <CardHeader className="text-center">
-                    <div className="w-16 h-16 mx-auto bg-gradient-accent rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <benefit.icon className="w-8 h-8 text-accent-foreground" />
+                    <div
+                      className="w-16 h-16 mx-auto flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
+                      style={{ background: "rgba(59,158,255,0.10)", borderRadius: "12px" }}
+                    >
+                      <benefit.icon className="w-8 h-8" style={{ color: "#1A56DB" }} />
                     </div>
                     <CardTitle className="text-xl font-semibold">{benefit.title}</CardTitle>
-                    <div className="text-sm text-accent font-medium">{benefit.stats}</div>
+                    <div className="text-sm font-medium" style={{ color: "#3B9EFF" }}>{benefit.stats}</div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground text-center">{benefit.description}</p>
+                    <p className="text-center" style={{ color: "#717A8A" }}>{benefit.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -113,33 +114,33 @@ const Avantages = () => {
         </section>
 
         {/* Testimonials */}
-        <section className="py-20 bg-secondary">
+        <section className="py-20" style={{ background: "transparent" }}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#1A1D24" }}>
                 Témoignages clients
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-xl" style={{ color: "#717A8A" }}>
                 Ce que disent nos partenaires hôteliers
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {testimonials.map((testimonial, index) => (
-                <Card key={index} className="border-border">
+                <Card key={index} className="glass-card">
                   <CardContent className="p-8">
                     <div className="flex items-center space-x-1 mb-4">
                       {[...Array(5)].map((_, i) => (
-                        <Sparkles key={i} className="w-5 h-5 text-accent fill-current" />
+                        <Sparkles key={i} className="w-5 h-5 fill-current" style={{ color: "#3B9EFF" }} />
                       ))}
                     </div>
-                    <blockquote className="text-foreground mb-6 italic text-lg">
+                    <blockquote className="mb-6 italic text-lg" style={{ color: "#1A1D24" }}>
                       "{testimonial.quote}"
                     </blockquote>
                     <div>
-                      <div className="font-semibold text-foreground">{testimonial.author}</div>
-                      <div className="text-muted-foreground text-sm">{testimonial.role}</div>
-                      <div className="text-accent text-sm font-medium">{testimonial.hotel}</div>
+                      <div className="font-semibold" style={{ color: "#1A1D24" }}>{testimonial.author}</div>
+                      <div className="text-sm" style={{ color: "#717A8A" }}>{testimonial.role}</div>
+                      <div className="text-sm font-medium" style={{ color: "#3B9EFF" }}>{testimonial.hotel}</div>
                     </div>
                   </CardContent>
                 </Card>
@@ -149,28 +150,22 @@ const Avantages = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-primary text-primary-foreground">
+        <section
+          className="py-20"
+          style={{ background: "#0A0E3D", borderRadius: "24px", margin: "0 40px 80px" }}
+        >
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6" style={{ color: "#F5F1EA" }}>
               Prêt à bénéficier de ces avantages ?
             </h2>
-            <p className="text-xl text-primary-foreground/80 mb-8">
+            <p className="text-xl mb-8" style={{ color: "rgba(245,241,234,0.65)" }}>
               Découvrez comment YourCoach AI peut transformer votre offre bien-être
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                asChild 
-                size="lg" 
-                className="bg-accent hover:bg-accent-light text-accent-foreground"
-              >
+              <Button asChild size="lg" style={{ background: "#3B9EFF", color: "#fff", borderRadius: "28px", border: "none" }}>
                 <Link to="/demo">Voir la démonstration</Link>
               </Button>
-              <Button 
-                asChild 
-                variant="outline" 
-                size="lg"
-                className="border-2 border-primary-foreground bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-primary font-semibold"
-              >
+              <Button asChild variant="outline" size="lg" style={{ borderColor: "rgba(245,241,234,0.20)", color: "#F5F1EA", background: "transparent", borderRadius: "28px" }}>
                 <Link to="/contact">Parler à un expert</Link>
               </Button>
             </div>
@@ -183,5 +178,3 @@ const Avantages = () => {
 };
 
 export default Avantages;
-
-

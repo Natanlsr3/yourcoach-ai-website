@@ -48,7 +48,7 @@ const Hero = () => {
   const wordStyle: React.CSSProperties = {
     fontStyle: "italic",
     display: "inline-block",
-    color: "#3b9eff",
+    color: "#1A56DB",
     ...(phase === "visible" && {
       opacity: 1,
       transform: "translateY(0)",

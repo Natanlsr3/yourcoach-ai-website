@@ -85,7 +85,7 @@ const Index = () => {
         {/* TODO: effet carte qui s'agrandit au scroll */}
         <section
           style={{
-            backgroundColor: "hsl(220, 20%, 14%)",
+            backgroundColor: "#0A0E3D",
             height: "100vh",
             display: "flex",
             alignItems: "center",
@@ -98,9 +98,8 @@ const Index = () => {
         >
           {/* Particle orbs */}
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-            <div style={{ position: "absolute", top: "-100px", left: "-80px", width: "600px", height: "600px", borderRadius: "50%", background: "rgba(59,158,255,0.06)", filter: "blur(80px)" }} />
-            <div style={{ position: "absolute", bottom: "-60px", right: "-60px", width: "400px", height: "400px", borderRadius: "50%", background: "rgba(59,158,255,0.06)", filter: "blur(80px)" }} />
-            <div style={{ position: "absolute", top: "30%", right: "10%", width: "300px", height: "300px", borderRadius: "50%", background: "rgba(59,158,255,0.06)", filter: "blur(80px)" }} />
+            <div style={{ position: "absolute", top: "-100px", left: "-80px", width: "500px", height: "500px", borderRadius: "50%", background: "rgba(59,158,255,0.18)", filter: "blur(105px)" }} />
+            <div style={{ position: "absolute", bottom: "-60px", right: "-60px", width: "350px", height: "350px", borderRadius: "50%", background: "rgba(26,86,219,0.14)", filter: "blur(115px)" }} />
           </div>
 
           <div style={{ maxWidth: "720px", position: "relative", zIndex: 1, textAlign: "center" }}>

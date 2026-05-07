@@ -227,3 +227,9 @@ body {
   line-height: 1.05;
   color: hsl(220 15% 12%);
 }
+
+/* ── Hero float animation (used by Solution page cards) ── */
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}

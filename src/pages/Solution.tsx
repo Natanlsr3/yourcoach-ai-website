@@ -328,7 +328,7 @@ const Solution = () => {
         <div ref={selectorRef} style={{ position: "relative" }}>
 
         {/* ── BLOC 0 — Hero ── */}
-        <section style={{ minHeight: "200vh", paddingBottom: "500px", position: "sticky", top: 0, zIndex: 1, overflow: "hidden" }}>
+        <section style={{ minHeight: "100vh", position: "relative", zIndex: 1, overflow: "hidden" }}>
 
           {/* Fond ciel bleu profond */}
           <div ref={heroBgRef} style={{
@@ -344,7 +344,7 @@ const Solution = () => {
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", paddingTop: "80px", marginBottom: "40px" }}>
               <h1 style={{
                 fontFamily: "'DM Serif Display', Georgia, serif",
-                fontSize: "82px", color: "#0f172a",
+                fontSize: "82px", color: "#0A0E3D",
                 letterSpacing: "-3.5px", lineHeight: 1.0,
                 margin: "0 0 16px",
               }}>Votre Coach sans contraintes</h1>
@@ -356,27 +356,29 @@ const Solution = () => {
             </div>
 
             {/* Grid 3 colonnes */}
-            <div style={{ display: "grid", gridTemplateColumns: "320px auto 320px", alignItems: "center", gap: 0, width: "100%", maxWidth: "1100px", margin: "0 auto" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "380px auto 380px", alignItems: "center", gap: "52px", width: "100%", maxWidth: "1340px", margin: "0 auto" }}>
 
               {/* Colonne gauche */}
-              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: "32px", alignItems: "flex-end", height: "600px" }}>
+              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "flex-end", height: "600px" }}>
 
-                <div style={{ width: "280px", borderRadius: "22px", padding: "24px 22px",
+                <div style={{ width: "350px", borderRadius: "22px", padding: "28px 28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
+                  animation: "hero-float 4s ease-in-out 0s infinite",
                 }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: "12px", display: "block" }}>
                     <path d="M12 21C12 21 3 15.5 3 9.5C3 7 5 5 7.5 5C9.24 5 10.91 6.01 12 7.09C13.09 6.01 14.76 5 16.5 5C19 5 21 7 21 9.5C21 15.5 12 21 12 21Z" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "13px", fontWeight: 700, color: "#0f172a", margin: "0 0 5px", lineHeight: 1.3 }}>Relation de confiance</p>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "11px", color: "rgba(15,23,42,0.48)", lineHeight: 1.55, margin: 0 }}>Un coach qui vous connaît, s'adapte et crée un vrai lien dans la durée.</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 700, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>Relation de confiance</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "#717A8A", lineHeight: 1.55, margin: 0 }}>Un coach qui vous connaît, s'adapte et crée un vrai lien dans la durée.</p>
                 </div>
 
-                <div style={{ width: "280px", borderRadius: "22px", padding: "24px 22px",
+                <div style={{ width: "350px", borderRadius: "22px", padding: "28px 28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
+                  animation: "hero-float 4s ease-in-out 0.7s infinite",
                 }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: "12px", display: "block" }}>
                     <circle cx="12" cy="12" r="2.5" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" />
@@ -387,8 +389,8 @@ const Solution = () => {
                     <line x1="17.7" y1="8.2" x2="14" y2="11" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" />
                     <line x1="12" y1="14.5" x2="12" y2="18" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "13px", fontWeight: 700, color: "#0f172a", margin: "0 0 5px", lineHeight: 1.3 }}>IA × Coachs & Médecins</p>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "11px", color: "rgba(15,23,42,0.48)", lineHeight: 1.55, margin: 0 }}>Algorithmes co-construits avec des experts. Chaque recommandation validée.</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 700, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>IA × Coachs & Médecins</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "#717A8A", lineHeight: 1.55, margin: 0 }}>Algorithmes co-construits avec des experts. Chaque recommandation validée.</p>
                 </div>
 
               </div>
@@ -424,25 +426,27 @@ const Solution = () => {
               </div>
 
               {/* Colonne droite */}
-              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: "32px", alignItems: "flex-start", height: "600px" }}>
+              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "flex-start", height: "600px" }}>
 
-                <div style={{ width: "280px", borderRadius: "22px", padding: "24px 22px",
+                <div style={{ width: "350px", borderRadius: "22px", padding: "28px 28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
+                  animation: "hero-float 4s ease-in-out 1.4s infinite",
                 }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: "12px", display: "block" }}>
                     <path d="M4 17C6 17 8 14 10 12C12 10 13 9 14 9C16 9 17 11 19 13" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" />
                     <path d="M17 11L19 13L21 11" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "13px", fontWeight: 700, color: "#0f172a", margin: "0 0 5px", lineHeight: 1.3 }}>Évolue à chaque séance</p>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "11px", color: "rgba(15,23,42,0.48)", lineHeight: 1.55, margin: 0 }}>Le coach apprend de chaque session. Plus vous l'utilisez, plus il vous connaît.</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 700, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>Évolue à chaque séance</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "#717A8A", lineHeight: 1.55, margin: 0 }}>Le coach apprend de chaque session. Plus vous l'utilisez, plus il vous connaît.</p>
                 </div>
 
-                <div style={{ width: "280px", borderRadius: "22px", padding: "24px 22px",
+                <div style={{ width: "350px", borderRadius: "22px", padding: "28px 28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
+                  animation: "hero-float 4s ease-in-out 2.1s infinite",
                 }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: "12px", display: "block" }}>
                     <circle cx="12" cy="4" r="1.5" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" />
@@ -450,8 +454,8 @@ const Solution = () => {
                     <path d="M12 8.5L14 11L17 10" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M10 14L13 15L15 19" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "13px", fontWeight: 700, color: "#0f172a", margin: "0 0 5px", lineHeight: 1.3 }}>Démonstration des mouvements</p>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "11px", color: "rgba(15,23,42,0.48)", lineHeight: 1.55, margin: 0 }}>Chaque exercice démontré en temps réel par l'avatar 3D.</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 700, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>Démonstration des mouvements</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "#717A8A", lineHeight: 1.55, margin: 0 }}>Chaque exercice démontré en temps réel par l'avatar 3D.</p>
                 </div>
 
               </div>
@@ -597,7 +601,7 @@ const Solution = () => {
                   setHoveredCard(card.id);
                   clearInterval(intervalRef.current[card.id]);
                   let count = 0;
-                  const TICKS = 50; // 2500ms / 50ms
+                  const TICKS = 80; // 4000ms / 50ms
                   intervalRef.current[card.id] = setInterval(() => {
                     count++;
                     setProgress(p => ({ ...p, [card.id]: count / TICKS }));
@@ -625,8 +629,8 @@ const Solution = () => {
                   boxSizing: "border-box",
                 }}
               >
-                {/* Image de fond conditionnelle */}
-                {(card.id === "Hôtel" || card.id === "Salle de sport" || card.id === "Entreprise") && (() => {
+                {/* Image de fond */}
+                {(() => {
                   const imgSrc = card.id === "Hôtel"
                     ? "/spa_hotel_luxe.jpg"
                     : card.id === "Salle de sport"
@@ -643,7 +647,7 @@ const Solution = () => {
                         height: "100%",
                         objectFit: "cover",
                         objectPosition: "center",
-                        opacity: isAct || isHov ? 0.85 : 0.75,
+                        opacity: isAct || isHov ? 1 : 0.9,
                         transition: "opacity 0.4s ease",
                         pointerEvents: "none",
                       }}
@@ -651,11 +655,13 @@ const Solution = () => {
                   );
                 })()}
 
-                {/* Overlay blanc léger */}
+                {/* Overlay sombre léger pour lisibilité du texte */}
                 <div style={{
                   position: "absolute",
                   inset: 0,
-                  background: isAct || isHov ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.18)",
+                  background: isAct || isHov
+                    ? "linear-gradient(to top, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 60%)"
+                    : "linear-gradient(to top, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.02) 60%)",
                   transition: "background 0.4s ease",
                   pointerEvents: "none",
                 }} />
@@ -674,7 +680,7 @@ const Solution = () => {
                     fontWeight: 600,
                     letterSpacing: "2px",
                     textTransform: "uppercase",
-                    color: card.labelColor,
+                    color: "rgba(255,255,255,0.75)",
                     margin: "0 0 10px",
                     opacity: showContent ? 1 : 0.7,
                     transition: "opacity 0.3s ease",
@@ -684,17 +690,18 @@ const Solution = () => {
                   <p style={{
                     fontFamily: "'DM Serif Display', Georgia, serif",
                     fontSize: "38px",
-                    color: "#0f172a",
+                    color: "#ffffff",
                     letterSpacing: "-1.3px",
                     lineHeight: 1.1,
                     margin: 0,
+                    textShadow: "0 2px 12px rgba(0,0,0,0.25)",
                   }}>
                     {card.title}
                   </p>
                   <p style={{
                     ...sans,
                     fontSize: "14px",
-                    color: "rgba(15,23,42,0.52)",
+                    color: "rgba(255,255,255,0.70)",
                     marginTop: "10px",
                     marginBottom: 0,
                     lineHeight: 1.55,
@@ -749,7 +756,7 @@ const Solution = () => {
         {activeTab === "Hôtel" && <>
 
         {/* ── BLOC 1 — Header hôtel — 2 photos fond + sticky scroll ── */}
-        <div ref={sectionRef} style={{ height: "380vh", position: "relative" }}>
+        <div ref={sectionRef} style={{ height: "250vh", position: "relative" }}>
           <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex" }}>
 
             {/* Fond — 2 photos côte à côte (sans séparateur) */}
@@ -854,7 +861,7 @@ const Solution = () => {
         <section
           ref={bloc2Ref}
           style={{
-            background: "#0f0f12",
+            background: "#0A0E3D",
             minHeight: "100vh",
             padding: "120px 80px",
             display: "flex",
@@ -866,9 +873,8 @@ const Solution = () => {
           }}
         >
           {/* Orbes décoratifs */}
-          <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "rgba(59,158,255,0.04)", filter: "blur(100px)", top: -100, left: -200, pointerEvents: "none", zIndex: 0 }} />
-          <div style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: "rgba(250,200,100,0.03)", filter: "blur(80px)", bottom: 0, right: -100, pointerEvents: "none", zIndex: 0 }} />
-          <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "rgba(139,92,246,0.03)", filter: "blur(60px)", top: "50%", left: "50%", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "rgba(59,158,255,0.18)", filter: "blur(105px)", top: -100, left: -200, pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: "rgba(26,86,219,0.14)", filter: "blur(115px)", bottom: 0, right: -100, pointerEvents: "none", zIndex: 0 }} />
 
           {/* Contenu */}
           <div style={{ position: "relative", zIndex: 1, maxWidth: 760, margin: "0 auto", textAlign: "center" }}>

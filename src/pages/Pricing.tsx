@@ -1,25 +1,61 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { 
-  CheckCircle, 
-  Users, 
-  Building, 
-  Phone, 
+import {
+  CheckCircle,
+  Phone,
   Mail,
-  Calculator,
-  Sparkles,
-  Shield,
-  Zap,
-  Clock,
-  Star,
-  TrendingUp,
-  Target,
-  BarChart3
+  Star
 } from "lucide-react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
+
+const sans = "-apple-system, BlinkMacSystemFont, sans-serif";
+const serif = "'DM Serif Display', Georgia, serif";
+const FG = "#1A1D24";
+const FG_MUT = "#717A8A";
+const BLUE = "#3B9EFF";
+const BLUE_DEEP = "#1A56DB";
+const NAVY = "#0A0E3D";
+const CREAM = "#F5F1EA";
+
+const glassCard: React.CSSProperties = {
+  background: "rgba(255,255,255,0.55)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
+  border: "1px solid rgba(255,255,255,0.85)",
+  boxShadow: "0 8px 32px rgba(60,100,180,0.10)",
+  borderRadius: "18px",
+};
+
+const btnPrimary: React.CSSProperties = {
+  fontFamily: sans,
+  backgroundColor: BLUE,
+  color: "#fff",
+  borderRadius: "28px",
+  padding: "13px 28px",
+  fontSize: "14px",
+  fontWeight: 600,
+  border: "none",
+  cursor: "pointer",
+  textDecoration: "none",
+  display: "inline-block",
+  width: "100%",
+  textAlign: "center",
+  boxSizing: "border-box",
+};
+
+const btnDark: React.CSSProperties = {
+  ...btnPrimary,
+  backgroundColor: NAVY,
+  color: CREAM,
+};
+
+const btnOutline: React.CSSProperties = {
+  ...btnPrimary,
+  backgroundColor: "transparent",
+  color: CREAM,
+  border: "1.5px solid rgba(245,241,234,0.20)",
+};
 
 const Pricing = () => {
   useDocumentTitle("YourCoach AI — Tarifs");
@@ -52,24 +88,6 @@ const Pricing = () => {
     { feature: "Personnalisation identité (logo/couleurs)", standard: true, premium: true }
   ];
 
-  const useCases = [
-    {
-      icon: TrendingUp,
-      title: "Installations mieux valorisées",
-      description: "Les clients découvrent et utilisent plus naturellement vos espaces bien-être."
-    },
-    {
-      icon: Target,
-      title: "Parcours client plus fluide",
-      description: "Un accompagnement disponible à toute heure, sans charge opérationnelle additionnelle."
-    },
-    {
-      icon: BarChart3,
-      title: "Pilotage par la donnée",
-      description: "Vous suivez l'usage et ajustez votre offre en continu."
-    }
-  ];
-
   const faq = [
     {
       q: "Combien de temps pour être opérationnel ?",
@@ -94,236 +112,173 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ fontFamily: sans }}>
       <Header />
-      <main id="main" className="pt-16">
-        {/* Hero Pricing */}
-        <section className="relative py-20 bg-gradient-hero text-primary-foreground">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Des formules simples, pensées pour l'hôtellerie de luxe
-              </h1>
-              <p className="text-xl md:text-2xl text-primary-foreground/80">
-                Deux niveaux, un même objectif : sublimer votre expérience bien-être sans complexité.
-              </p>
-            </div>
+      <main id="main" style={{ paddingTop: "64px" }}>
+
+        {/* Hero */}
+        <section style={{ background: "transparent", padding: "80px 24px" }}>
+          <div style={{ maxWidth: "896px", margin: "0 auto", textAlign: "center" }}>
+            <span style={{ fontFamily: sans, fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", color: BLUE_DEEP, display: "block", marginBottom: "20px" }}>
+              Tarifs
+            </span>
+            <h1 style={{ fontFamily: serif, fontSize: "58px", color: FG, letterSpacing: "-2px", lineHeight: 1.05, marginBottom: "20px", marginTop: 0 }}>
+              Des formules simples,<br />pensées pour l'hôtellerie de luxe
+            </h1>
+            <p style={{ fontFamily: sans, fontSize: "18px", color: FG_MUT, lineHeight: 1.65, maxWidth: "540px", margin: "0 auto" }}>
+              Deux niveaux, un même objectif : sublimer votre expérience bien-être sans complexité.
+            </p>
           </div>
         </section>
 
         {/* Plans Cards */}
-        <section className="py-20 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Standard Plan */}
-              <Card className="border-border hover:shadow-medium transition-all">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-3xl text-foreground">Standard</CardTitle>
-                  <p className="text-muted-foreground text-lg">
-                    Le socle complet pour activer YourCoach AI rapidement.
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    {standardFeatures.map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-3">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0" />
-                        <span className="text-foreground">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <Button 
-                    asChild 
-                    size="lg" 
-                    className="w-full bg-gradient-accent hover:opacity-90"
-                  >
-                    <Link to="/contact">Demander un devis Standard</Link>
-                  </Button>
-                </CardContent>
-              </Card>
+        <section style={{ background: "transparent", padding: "0 40px 80px" }}>
+          <div style={{ maxWidth: "1152px", margin: "0 auto" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "24px" }}>
 
-              {/* Premium Plan */}
-              <Card className="border-border hover:shadow-medium transition-all relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-accent text-accent-foreground px-10 py-2 text-sm font-medium transform rotate-45 translate-x-12 translate-y-6">
+              {/* Standard */}
+              <div style={{ ...glassCard, padding: "40px 36px" }}>
+                <h2 style={{ fontFamily: serif, fontSize: "36px", color: FG, letterSpacing: "-1px", marginTop: 0, marginBottom: "8px" }}>Standard</h2>
+                <p style={{ fontFamily: sans, fontSize: "15px", color: FG_MUT, lineHeight: 1.6, marginTop: 0, marginBottom: "32px" }}>
+                  Le socle complet pour activer YourCoach AI rapidement.
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "36px" }}>
+                  {standardFeatures.map((feature, index) => (
+                    <div key={index} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                      <CheckCircle style={{ width: "18px", height: "18px", color: BLUE, flexShrink: 0, marginTop: "1px" }} />
+                      <span style={{ fontFamily: sans, fontSize: "14px", color: FG, lineHeight: 1.5 }}>{feature}</span>
+                    </div>
+                  ))}
+                </div>
+                <Link to="/contact" style={btnDark}>Demander un devis Standard</Link>
+              </div>
+
+              {/* Premium */}
+              <div style={{ ...glassCard, padding: "40px 36px", position: "relative", overflow: "hidden", border: "1px solid rgba(59,158,255,0.30)" }}>
+                <div style={{ position: "absolute", top: 0, right: 0, background: BLUE, color: "#fff", padding: "4px 32px 4px 16px", fontSize: "11px", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", borderBottomLeftRadius: "14px" }}>
                   Recommandé
                 </div>
-                <CardHeader className="text-center">
-                  <div className="flex items-center justify-center space-x-2 mb-2">
-                    <Star className="w-5 h-5 text-accent fill-current" />
-                    <span className="text-sm text-accent font-medium">Le plus choisi par les établissements 5★</span>
-                  </div>
-                  <CardTitle className="text-3xl text-foreground">Premium</CardTitle>
-                  <p className="text-muted-foreground text-lg">
-                    Pour une expérience signature et pilotée finement.
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    {premiumFeatures.map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-3">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0" />
-                        <span className="text-foreground">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <Button 
-                    asChild 
-                    size="lg" 
-                    className="w-full bg-gradient-primary hover:opacity-90"
-                  >
-                    <Link to="/contact">Demander un devis Premium</Link>
-                  </Button>
-                </CardContent>
-              </Card>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+                  <Star style={{ width: "16px", height: "16px", color: BLUE, fill: BLUE }} />
+                  <span style={{ fontFamily: sans, fontSize: "12px", color: BLUE, fontWeight: 600 }}>Le plus choisi par les établissements 5★</span>
+                </div>
+                <h2 style={{ fontFamily: serif, fontSize: "36px", color: FG, letterSpacing: "-1px", marginTop: 0, marginBottom: "8px" }}>Premium</h2>
+                <p style={{ fontFamily: sans, fontSize: "15px", color: FG_MUT, lineHeight: 1.6, marginTop: 0, marginBottom: "32px" }}>
+                  Pour une expérience signature et pilotée finement.
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "36px" }}>
+                  {premiumFeatures.map((feature, index) => (
+                    <div key={index} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                      <CheckCircle style={{ width: "18px", height: "18px", color: BLUE, flexShrink: 0, marginTop: "1px" }} />
+                      <span style={{ fontFamily: sans, fontSize: "14px", color: FG, lineHeight: 1.5 }}>{feature}</span>
+                    </div>
+                  ))}
+                </div>
+                <Link to="/contact" style={btnPrimary}>Demander un devis Premium</Link>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Comparison Table */}
-        <section className="py-20 bg-secondary">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
+        {/* Tableau comparatif */}
+        <section style={{ background: "transparent", padding: "0 40px 80px" }}>
+          <div style={{ maxWidth: "896px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <h2 style={{ fontFamily: serif, fontSize: "44px", color: FG, letterSpacing: "-1.5px", lineHeight: 1.08, margin: 0 }}>
                 Comparer en un coup d'œil
               </h2>
             </div>
 
-            <Card className="border-border">
-              <CardContent className="p-0">
-                <div className="grid grid-cols-3 gap-0">
-                  <div className="p-6 bg-muted/50 font-semibold text-foreground">Fonctionnalités</div>
-                  <div className="p-6 bg-muted/50 font-semibold text-foreground text-center">Standard</div>
-                  <div className="p-6 bg-muted/50 font-semibold text-foreground text-center">Premium</div>
-                  
-                  {comparisonTable.map((row, index) => (
-                    <>
-                      <div className="p-4 border-b border-border text-foreground">{row.feature}</div>
-                      <div className="p-4 border-b border-border text-center">
-                        {row.standard ? <CheckCircle className="w-5 h-5 text-accent mx-auto" /> : <span className="text-muted-foreground">—</span>}
-                      </div>
-                      <div className="p-4 border-b border-border text-center">
-                        {row.premium ? <CheckCircle className="w-5 h-5 text-accent mx-auto" /> : <span className="text-muted-foreground">—</span>}
-                      </div>
-                    </>
-                  ))}
+            <div style={{ ...glassCard, overflow: "hidden", padding: 0 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr" }}>
+                <div style={{ padding: "18px 24px", background: "rgba(255,255,255,0.35)", borderBottom: "1px solid rgba(0,0,0,0.06)", fontFamily: serif, fontSize: "16px", color: FG }}>Fonctionnalités</div>
+                <div style={{ padding: "18px 24px", background: "rgba(255,255,255,0.35)", borderBottom: "1px solid rgba(0,0,0,0.06)", fontFamily: serif, fontSize: "16px", color: FG, textAlign: "center", borderLeft: "1px solid rgba(0,0,0,0.06)" }}>Standard</div>
+                <div style={{ padding: "18px 24px", background: "rgba(255,255,255,0.35)", borderBottom: "1px solid rgba(0,0,0,0.06)", fontFamily: serif, fontSize: "16px", color: BLUE, textAlign: "center", borderLeft: "1px solid rgba(0,0,0,0.06)" }}>Premium</div>
+              </div>
+              {comparisonTable.map((row, index) => (
+                <div key={index} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", borderBottom: index < comparisonTable.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none" }}>
+                  <div style={{ padding: "14px 24px", fontFamily: sans, fontSize: "14px", color: FG }}>{row.feature}</div>
+                  <div style={{ padding: "14px 24px", textAlign: "center", borderLeft: "1px solid rgba(0,0,0,0.06)" }}>
+                    {row.standard ? <CheckCircle style={{ width: "18px", height: "18px", color: BLUE, margin: "0 auto" }} /> : <span style={{ color: FG_MUT }}>—</span>}
+                  </div>
+                  <div style={{ padding: "14px 24px", textAlign: "center", borderLeft: "1px solid rgba(0,0,0,0.06)" }}>
+                    {row.premium ? <CheckCircle style={{ width: "18px", height: "18px", color: BLUE, margin: "0 auto" }} /> : <span style={{ color: FG_MUT }}>—</span>}
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-
-            <div className="text-center mt-6 text-sm text-muted-foreground">
-              Pas de matériel additionnel requis. Fonctionne sur smartphone. Support et mises à jour inclus.
+              ))}
             </div>
+
+            <p style={{ fontFamily: sans, fontSize: "13px", color: FG_MUT, textAlign: "center", marginTop: "16px" }}>
+              Pas de matériel additionnel requis. Fonctionne sur smartphone. Support et mises à jour inclus.
+            </p>
           </div>
         </section>
 
         {/* Devis Express */}
-        <section className="py-20 bg-background">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section style={{ background: "transparent", padding: "0 40px 80px" }}>
+          <div style={{ maxWidth: "1152px", margin: "0 auto" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "48px", alignItems: "center" }}>
               <div>
-                <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
+                <h2 style={{ fontFamily: serif, fontSize: "44px", color: FG, letterSpacing: "-1.5px", lineHeight: 1.08, marginTop: 0, marginBottom: "16px" }}>
                   Devis express en 15 minutes
                 </h2>
-                <p className="text-xl text-muted-foreground">
+                <p style={{ fontFamily: sans, fontSize: "17px", color: FG_MUT, lineHeight: 1.7, margin: 0 }}>
                   Un conseiller vous recontacte sous 24h avec une proposition adaptée à vos espaces.
                 </p>
               </div>
-              
-              <Card className="border-border">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-center">Obtenez votre devis en 15 minutes</CardTitle>
-                 
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <Button 
-                    asChild 
-                    size="lg" 
-                    className="w-full bg-gradient-accent hover:opacity-90"
-                  >
-                    <Link to="/contact">Démarrer mon devis gratuit</Link>
-                  </Button>
 
-                  <div className="text-center text-sm text-muted-foreground space-y-2">
-                    <p>Ou contactez-nous directement :</p>
-                    <div className="flex justify-center space-x-4">
-                      <a 
-                        href="tel:+33658161692" 
-                        className="flex items-center space-x-1 text-accent hover:text-accent-light"
-                      >
-                        <Phone className="w-4 h-4" />
-                        <span>+33 6 58 16 16 92</span>
-                      </a>
-                      <a 
-                        href="mailto:natan.lasar@mikevirtualcoach.com" 
-                        className="flex items-center space-x-1 text-accent hover:text-accent-light"
-                      >
-                        <Mail className="w-4 h-4" />
-                        <span>natan.lasar@mikevirtualcoach.com</span>
-                      </a>
-                    </div>
+              <div style={{ ...glassCard, padding: "36px 32px" }}>
+                <h3 style={{ fontFamily: serif, fontSize: "24px", color: FG, letterSpacing: "-0.5px", textAlign: "center", marginTop: 0, marginBottom: "24px" }}>
+                  Obtenez votre devis en 15 minutes
+                </h3>
+                <Link to="/contact" style={{ ...btnDark, marginBottom: "20px", display: "block" }}>Démarrer mon devis gratuit</Link>
+                <div style={{ textAlign: "center" }}>
+                  <p style={{ fontFamily: sans, fontSize: "13px", color: FG_MUT, marginBottom: "10px" }}>Ou contactez-nous directement :</p>
+                  <div style={{ display: "flex", justifyContent: "center", gap: "20px", flexWrap: "wrap" }}>
+                    <a href="tel:+33658161692" style={{ display: "flex", alignItems: "center", gap: "6px", fontFamily: sans, fontSize: "13px", color: BLUE, textDecoration: "none" }}>
+                      <Phone style={{ width: "14px", height: "14px" }} />
+                      +33 6 58 16 16 92
+                    </a>
+                    <a href="mailto:natan.lasar@mikevirtualcoach.com" style={{ display: "flex", alignItems: "center", gap: "6px", fontFamily: sans, fontSize: "13px", color: BLUE, textDecoration: "none" }}>
+                      <Mail style={{ width: "14px", height: "14px" }} />
+                      natan.lasar@mikevirtualcoach.com
+                    </a>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-
-
         {/* FAQ */}
-        <section className="py-20 bg-secondary">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                Questions fréquentes
-              </h2>
-            </div>
-
-            <div className="space-y-6">
+        <section style={{ background: "transparent", padding: "0 40px 80px" }}>
+          <div style={{ maxWidth: "768px", margin: "0 auto" }}>
+            <h2 style={{ fontFamily: serif, fontSize: "44px", color: FG, letterSpacing: "-1.5px", textAlign: "center", marginTop: 0, marginBottom: "48px" }}>
+              Questions fréquentes
+            </h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {faq.map((item, index) => (
-                <Card key={index} className="border-border">
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold text-foreground mb-2">{item.q}</h3>
-                    <p className="text-muted-foreground">{item.a}</p>
-                  </CardContent>
-                </Card>
+                <div key={index} style={{ ...glassCard, padding: "24px 28px" }}>
+                  <h3 style={{ fontFamily: sans, fontSize: "15px", fontWeight: 600, color: FG, margin: "0 0 8px" }}>{item.q}</h3>
+                  <p style={{ fontFamily: sans, fontSize: "14px", color: FG_MUT, lineHeight: 1.7, margin: 0 }}>{item.a}</p>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Final CTA */}
-        <section className="py-20 bg-gradient-primary text-primary-foreground">
-          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              Prêt à lancer YourCoach AI dans votre établissement ?
-            </h2>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                asChild 
-                size="lg" 
-                className="bg-accent hover:bg-accent-light text-accent-foreground"
-              >
-                <Link to="/contact">Choisir Standard</Link>
-              </Button>
-              <Button 
-                asChild 
-                size="lg" 
-                className="bg-accent hover:bg-accent-light text-accent-foreground"
-              >
-                <Link to="/contact">Choisir Premium</Link>
-              </Button>
-              <Button 
-                asChild 
-                variant="outline" 
-                size="lg"
-                className="border-2 border-primary-foreground bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-primary font-semibold"
-              >
-                <Link to="/contact">Parler à un expert</Link>
-              </Button>
-            </div>
+        {/* CTA Final */}
+        <section style={{ margin: "0 40px 80px", borderRadius: "24px", background: NAVY, padding: "80px 40px", textAlign: "center" }}>
+          <h2 style={{ fontFamily: serif, fontSize: "48px", color: CREAM, letterSpacing: "-1.5px", lineHeight: 1.05, marginTop: 0, marginBottom: "40px" }}>
+            Prêt à lancer YourCoach AI<br />dans votre établissement ?
+          </h2>
+          <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link to="/contact" style={{ ...btnDark, width: "auto" }}>Choisir Standard</Link>
+            <Link to="/contact" style={{ ...btnPrimary, width: "auto" }}>Choisir Premium</Link>
+            <Link to="/contact" style={{ ...btnOutline, width: "auto" }}>Parler à un expert</Link>
           </div>
         </section>
+
       </main>
       <Footer />
     </div>
@@ -331,5 +286,3 @@ const Pricing = () => {
 };
 
 export default Pricing;
-
-
