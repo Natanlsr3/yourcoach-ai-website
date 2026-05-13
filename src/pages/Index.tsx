@@ -31,7 +31,9 @@ const Index = () => {
   useDocumentTitle("MikeVirtualCoach — Studio Fitness & Wellness Tech Premium");
 
   const teaserRef = useRef<HTMLDivElement>(null);
+  const visionRef = useRef<HTMLDivElement>(null);
   const vignetteRef = useRef<HTMLDivElement>(null);
+  const [visionVisible, setVisionVisible] = useState(false);
   const [vignetteVisible, setVignetteVisible] = useState<boolean[]>(Array(10).fill(false));
 
   useEffect(() => {
@@ -54,6 +56,19 @@ const Index = () => {
     if (container) {
       container.querySelectorAll('[data-vig-idx]').forEach(el => observer.observe(el));
     }
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = visionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisionVisible(true);
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
@@ -82,11 +97,11 @@ const Index = () => {
         <Hero />
 
         {/* BANDEAU 2 — Transition immersive */}
-        {/* TODO: effet carte qui s'agrandit au scroll */}
         <section
           style={{
             backgroundColor: "#0A0E3D",
             height: "100vh",
+            position: "relative",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -98,11 +113,22 @@ const Index = () => {
         >
           {/* Particle orbs */}
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-            <div style={{ position: "absolute", top: "-100px", left: "-80px", width: "500px", height: "500px", borderRadius: "50%", background: "rgba(59,158,255,0.18)", filter: "blur(105px)" }} />
-            <div style={{ position: "absolute", bottom: "-60px", right: "-60px", width: "350px", height: "350px", borderRadius: "50%", background: "rgba(26,86,219,0.14)", filter: "blur(115px)" }} />
+            <div style={{ position: "absolute", top: "-100px", left: "-80px", width: "500px", height: "500px", borderRadius: "50%", background: "rgba(59,158,255,0.18)", filter: "blur(105px)", willChange: "transform" }} />
+            <div style={{ position: "absolute", bottom: "-60px", right: "-60px", width: "350px", height: "350px", borderRadius: "50%", background: "rgba(26,86,219,0.14)", filter: "blur(115px)", willChange: "transform" }} />
           </div>
 
-          <div style={{ maxWidth: "720px", position: "relative", zIndex: 1, textAlign: "center" }}>
+          <div
+            ref={visionRef}
+            style={{
+              maxWidth: "720px",
+              position: "relative",
+              zIndex: 1,
+              textAlign: "center",
+              opacity: visionVisible ? 1 : 0,
+              transform: visionVisible ? "translateY(0)" : "translateY(30px)",
+              transition: "opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1)",
+            }}
+          >
             <span style={{ ...labelStyle, color: "rgba(255,255,255,0.35)" }}>
               Notre vision
             </span>
@@ -133,10 +159,12 @@ const Index = () => {
         {/* BANDEAU 3 — Technologies & Experts */}
         {/* TODO: design final à définir */}
         <section
+          className="px-4 sm:px-10 lg:px-20"
           style={{
             backgroundColor: "transparent",
             minHeight: "100vh",
-            padding: "120px 80px",
+            paddingTop: "120px",
+            paddingBottom: "120px",
           }}
         >
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
@@ -171,10 +199,8 @@ const Index = () => {
             }}>LES TECHNOLOGIES</p>
 
             <div
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(5, 1fr)",
-                gap: "12px",
                 marginBottom: "48px",
               }}
             >
@@ -231,7 +257,7 @@ const Index = () => {
                   }}
                 >
                   <div style={{ marginBottom: "12px" }}>{v.icon}</div>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "13px", fontWeight: 700, color: "#0f172a", margin: "0 0 5px", lineHeight: 1.3 }}>{v.title}</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "13px", fontWeight: 600, color: "#1A1D24", margin: "0 0 5px", lineHeight: 1.3 }}>{v.title}</p>
                   <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "rgba(15,23,42,0.48)", lineHeight: 1.55, margin: 0 }}>{v.text}</p>
                 </div>
               ))}
@@ -254,11 +280,7 @@ const Index = () => {
             }}>LES EXPERTS</p>
 
             <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(5, 1fr)",
-                gap: "12px",
-              }}
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"
             >
               {[
                 {
@@ -315,7 +337,7 @@ const Index = () => {
                     }}
                   >
                     <div style={{ marginBottom: "12px" }}>{v.icon}</div>
-                    <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "13px", fontWeight: 700, color: "#0f172a", margin: "0 0 5px", lineHeight: 1.3 }}>{v.title}</p>
+                    <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "13px", fontWeight: 600, color: "#1A1D24", margin: "0 0 5px", lineHeight: 1.3 }}>{v.title}</p>
                     <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "rgba(15,23,42,0.48)", lineHeight: 1.55, margin: 0 }}>{v.text}</p>
                   </div>
                 );
@@ -341,7 +363,7 @@ const Index = () => {
               style={{
                 fontFamily: "'DM Serif Display', Georgia, serif",
                 fontSize: "44px",
-                color: "#0f172a",
+                color: "#1A1D24",
                 lineHeight: 1.1,
                 letterSpacing: "-1px",
                 marginBottom: "24px",
@@ -391,7 +413,7 @@ const Index = () => {
                   }}
                 >
                   <span style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "80px", color: "rgba(15,23,42,0.06)", lineHeight: 1, flexShrink: 0, width: "80px", display: "block" }}>{card.num}</span>
-                  <p style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "28px", color: "#0f172a", flexShrink: 0, width: "220px", margin: 0, lineHeight: 1.2 }}>{card.name}</p>
+                  <p style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "28px", color: "#1A1D24", flexShrink: 0, width: "220px", margin: 0, lineHeight: 1.2 }}>{card.name}</p>
                   <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "15px", color: "rgba(15,23,42,0.48)", lineHeight: 1.65, flex: 1, margin: 0 }}>{card.text}</p>
                 </div>
               ))}
@@ -449,13 +471,13 @@ const Index = () => {
             <Link
               to="/solution"
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.03)";
+                e.currentTarget.style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.transform = "translateY(0)";
               }}
               style={{
-                backgroundColor: BLUE,
+                backgroundColor: "#0A0E3D",
                 color: "#fff",
                 borderRadius: "28px",
                 padding: "13px 28px",
@@ -466,7 +488,7 @@ const Index = () => {
                 transition: "transform 0.2s ease",
               }}
             >
-              Découvrir →
+              Explorer la solution
             </Link>
           </div>
         </section>

@@ -1,10 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LogoIcon } from "@/components/ui/logo-icon";
 import { Mail, Phone, MapPin, Linkedin, Twitter } from "lucide-react";
 
 const sans = "-apple-system, BlinkMacSystemFont, sans-serif";
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const goTo = (path: string, anchor?: string) => {
+    if (location.pathname === path) {
+      if (anchor) {
+        const el = document.getElementById(anchor);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        } else {
+          // L'élément n'existe pas (ex: onglet différent) → forcer via hash
+          window.location.hash = "";
+          requestAnimationFrame(() => { window.location.hash = "#" + anchor; });
+        }
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else {
+      navigate(path + (anchor ? "#" + anchor : ""));
+    }
+  };
+
   return (
     <footer style={{ margin: "0 24px 24px", fontFamily: sans }}>
       <div style={{
@@ -21,7 +43,7 @@ const Footer = () => {
                 <div style={{ width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <LogoIcon className="w-6 h-6" style={{ color: "#F5F1EA" }} />
                 </div>
-                <span style={{ fontWeight: 700, fontSize: "20px", color: "rgba(255,255,255,0.90)" }}>
+                <span style={{ fontWeight: 600, fontSize: "20px", color: "rgba(255,255,255,0.90)" }}>
                   YourCoach<span style={{ color: "#3b9eff" }}> AI</span>
                 </span>
               </Link>
@@ -60,20 +82,21 @@ const Footer = () => {
               <h3 style={{ fontWeight: 600, fontSize: "15px", color: "rgba(255,255,255,0.90)", marginBottom: "16px", marginTop: 0 }}>Solution</h3>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
                 {[
-                  { to: "/solution", label: "Comment ça marche" },
-                  { to: "/avantages", label: "Avantages" },
-                  { to: "/demo",     label: "Demander une démo" },
-                  { to: "/pricing",  label: "Tarifs" },
-                ].map(({ to, label }) => (
-                  <li key={to}>
-                    <Link
-                      to={to}
-                      style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px", textDecoration: "none", transition: "color 0.2s" }}
+                  { path: "/solution", anchor: undefined,    label: "Comment ça marche" },
+                  { path: "/solution", anchor: "avantages",  label: "Avantages" },
+                  { path: "/contact",  anchor: undefined,    label: "Demander une démo" },
+                  { path: "/contact",  anchor: undefined,    label: "Tarifs" },
+                ].map(({ path, anchor, label }) => (
+                  <li key={label}>
+                    <a
+                      href={path + (anchor ? `#${anchor}` : "")}
+                      onClick={(e) => { e.preventDefault(); goTo(path, anchor); }}
+                      style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px", textDecoration: "none", transition: "color 0.2s", cursor: "pointer" }}
                       onMouseEnter={e => (e.currentTarget.style.color = "#3b9eff")}
                       onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}
                     >
                       {label}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>

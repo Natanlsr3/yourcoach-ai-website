@@ -17,7 +17,7 @@ const NotFound = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary">
       <div className="text-center px-6">
-        <h1 className="text-6xl font-bold mb-2">404</h1>
+        <h1 className="text-6xl font-semibold mb-2">404</h1>
         <p className="text-xl text-muted-foreground mb-6">Désolé, cette page n'existe pas.</p>
         <Link to="/" className="text-accent underline font-medium">
           Retour à l'accueil

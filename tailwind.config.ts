@@ -82,7 +82,8 @@ export default {
 				'accent': 'var(--shadow-accent)',
 			},
             fontFamily: {
-                'display': ['Sakana', 'Inter', 'system-ui', 'sans-serif'],
+                'display': ["'DM Serif Display'", 'Georgia', 'serif'],
+                'display-mvc': ['Sakana', 'Inter', 'system-ui', 'sans-serif'],
                 'body': ['Inter', 'SF Pro Text', 'system-ui', 'sans-serif'],
             },
 			keyframes: {

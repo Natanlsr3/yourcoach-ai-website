@@ -152,7 +152,7 @@ const About = () => {
                 >
                   01
                 </span>
-                <h3 style={{ fontSize: 24, fontWeight: 700, color: "#1A1D24", marginBottom: 16 }}>
+                <h3 style={{ fontSize: 24, fontWeight: 600, color: "#1A1D24", marginBottom: 16 }}>
                   Notre Mission
                 </h3>
                 <p style={{ fontSize: 17, color: "#717A8A", lineHeight: 1.7 }}>
@@ -175,7 +175,7 @@ const About = () => {
                 >
                   02
                 </span>
-                <h3 style={{ fontSize: 24, fontWeight: 700, color: "#1A1D24", marginBottom: 16 }}>
+                <h3 style={{ fontSize: 24, fontWeight: 600, color: "#1A1D24", marginBottom: 16 }}>
                   Notre Vision
                 </h3>
                 <p style={{ fontSize: 17, color: "#717A8A", lineHeight: 1.7 }}>
@@ -245,7 +245,7 @@ const About = () => {
                       style={{ color: "#1a56db", opacity: 0.6 }}
                     />
                   </div>
-                  <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1A1D24", marginBottom: 10 }}>
+                  <h3 style={{ fontSize: 17, fontWeight: 600, color: "#1A1D24", marginBottom: 10 }}>
                     {value.title}
                   </h3>
                   <p style={{ fontSize: 14, color: "#717A8A", lineHeight: 1.6 }}>
@@ -320,7 +320,7 @@ const About = () => {
                         </div>
                       )}
                     </div>
-                    <h3 style={{ fontSize: 18, fontWeight: 700, color: "#1A1D24", marginBottom: 4 }}>
+                    <h3 style={{ fontSize: 18, fontWeight: 600, color: "#1A1D24", marginBottom: 4 }}>
                       {member.name}
                     </h3>
                     <div style={{ fontSize: 13, color: "#1a56db", fontWeight: 600, marginBottom: 12 }}>
@@ -410,10 +410,10 @@ const About = () => {
                 asChild
                 size="lg"
                 style={{
-                  background: "#1a56db",
+                  background: "#0A0E3D",
                   color: "#fff",
                   border: "none",
-                  borderRadius: 12,
+                  borderRadius: 28,
                   fontWeight: 600,
                   padding: "14px 32px",
                   fontSize: 15,
@@ -430,13 +430,13 @@ const About = () => {
                   WebkitBackdropFilter: "blur(16px)",
                   color: "#fff",
                   border: "1px solid rgba(255,255,255,0.12)",
-                  borderRadius: 12,
+                  borderRadius: 28,
                   fontWeight: 600,
                   padding: "14px 32px",
                   fontSize: 15,
                 }}
               >
-                <Link to="/contact">Nous rencontrer</Link>
+                <Link to="/contact">Échanger avec un expert</Link>
               </Button>
             </div>
           </div>

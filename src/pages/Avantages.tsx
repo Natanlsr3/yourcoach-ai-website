@@ -65,7 +65,7 @@ const Avantages = () => {
         <section className="relative py-20" style={{ background: "transparent" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6" style={{ color: "#1A1D24" }}>
+              <h1 className="text-4xl md:text-6xl font-semibold mb-6" style={{ color: "#1A1D24" }}>
                 Avantages <span style={{ color: "#3B9EFF" }}>concrets</span> pour votre hôtel
               </h1>
               <p className="text-xl md:text-2xl mb-8" style={{ color: "#717A8A" }}>
@@ -80,7 +80,7 @@ const Avantages = () => {
         <section className="py-20" style={{ background: "transparent" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#1A1D24" }}>
+              <h2 className="text-3xl md:text-5xl font-semibold mb-4" style={{ color: "#1A1D24" }}>
                 5 avantages majeurs
               </h2>
               <p className="text-xl max-w-3xl mx-auto" style={{ color: "#717A8A" }}>
@@ -117,7 +117,7 @@ const Avantages = () => {
         <section className="py-20" style={{ background: "transparent" }}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#1A1D24" }}>
+              <h2 className="text-3xl md:text-5xl font-semibold mb-4" style={{ color: "#1A1D24" }}>
                 Témoignages clients
               </h2>
               <p className="text-xl" style={{ color: "#717A8A" }}>
@@ -155,7 +155,7 @@ const Avantages = () => {
           style={{ background: "#0A0E3D", borderRadius: "24px", margin: "0 40px 80px" }}
         >
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6" style={{ color: "#F5F1EA" }}>
+            <h2 className="text-3xl md:text-5xl font-semibold mb-6" style={{ color: "#F5F1EA" }}>
               Prêt à bénéficier de ces avantages ?
             </h2>
             <p className="text-xl mb-8" style={{ color: "rgba(245,241,234,0.65)" }}>
@@ -163,7 +163,7 @@ const Avantages = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" style={{ background: "#3B9EFF", color: "#fff", borderRadius: "28px", border: "none" }}>
-                <Link to="/demo">Voir la démonstration</Link>
+                <Link to="/contact">Réserver ma démo</Link>
               </Button>
               <Button asChild variant="outline" size="lg" style={{ borderColor: "rgba(245,241,234,0.20)", color: "#F5F1EA", background: "transparent", borderRadius: "28px" }}>
                 <Link to="/contact">Parler à un expert</Link>

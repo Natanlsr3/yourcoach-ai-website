@@ -76,7 +76,7 @@ const Header = () => {
                 fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
                 fontWeight: 600,
                 fontSize: "19px",
-                color: "#0f172a",
+                color: "#1A1D24",
                 letterSpacing: "-0.4px",
               }}
             >
@@ -92,7 +92,7 @@ const Header = () => {
                 fontFamily: "'DM Serif Display', Georgia, serif",
                 fontSize: "32px",
                 fontWeight: 400,
-                color: "#0f172a",
+                color: "#1A1D24",
                 textDecoration: "none",
                 padding: "6px 14px",
                 borderRadius: "10px",
@@ -149,16 +149,16 @@ const Header = () => {
                 fontSize: "15px",
                 fontWeight: 600,
                 color: "#ffffff",
-                backgroundColor: "rgba(15,20,40,0.88)",
-                borderRadius: "22px",
+                backgroundColor: "#0A0E3D",
+                borderRadius: "28px",
                 padding: "9px 20px",
                 textDecoration: "none",
                 border: "none",
                 whiteSpace: "nowrap",
                 transition: `background-color 180ms ${EASE}`,
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(15,20,40,1)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "rgba(15,20,40,0.88)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
               Nous contacter
             </Link>

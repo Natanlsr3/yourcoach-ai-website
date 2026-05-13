@@ -12,7 +12,7 @@ const Terms = () => {
       <main id="main" className="pt-16">
         <section className="py-20 bg-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-8">Conditions d'utilisation</h1>
+            <h1 className="text-4xl md:text-6xl font-semibold text-foreground mb-8">Conditions d'utilisation</h1>
             <Card className="border-border">
               <CardContent className="prose prose-slate max-w-none p-6">
                 <p>

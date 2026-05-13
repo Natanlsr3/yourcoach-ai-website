@@ -53,7 +53,7 @@ const Demo = () => {
         <section className="relative py-20" style={{ background: "transparent" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6" style={{ color: "#1A1D24" }}>
+              <h1 className="text-4xl md:text-6xl font-semibold mb-6" style={{ color: "#1A1D24" }}>
                 Vivez l'expérience <span style={{ color: "#3B9EFF" }}>YourCoach AI</span>
               </h1>
               <p className="text-xl md:text-2xl mb-8" style={{ color: "#717A8A" }}>
@@ -68,7 +68,7 @@ const Demo = () => {
         <section className="py-20" style={{ background: "transparent" }}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#1A1D24" }}>
+              <h2 className="text-3xl md:text-5xl font-semibold mb-4" style={{ color: "#1A1D24" }}>
                 Démo interactive en direct
               </h2>
               <p className="text-xl" style={{ color: "#717A8A" }}>
@@ -83,7 +83,7 @@ const Demo = () => {
                   <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 hover:scale-110 transition-transform cursor-pointer" style={{ background: "#3B9EFF" }}>
                     <Play className="w-12 h-12 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-2">À venir bientôt</h3>
+                  <h3 className="text-2xl font-semibold mb-2">À venir bientôt</h3>
                 </div>
               </div>
             </div>
@@ -114,7 +114,7 @@ const Demo = () => {
         <section className="py-20" style={{ background: "transparent" }}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#1A1D24" }}>
+              <h2 className="text-3xl md:text-5xl font-semibold mb-4" style={{ color: "#1A1D24" }}>
                 Ce que disent nos partenaires
               </h2>
               <p className="text-xl" style={{ color: "#717A8A" }}>
@@ -149,7 +149,7 @@ const Demo = () => {
         <section className="py-20" style={{ background: "transparent" }}>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "#1A1D24" }}>
+              <h2 className="text-3xl md:text-5xl font-semibold mb-4" style={{ color: "#1A1D24" }}>
                 Demander une démo personnalisée
               </h2>
               <p className="text-xl" style={{ color: "#717A8A" }}>
@@ -159,7 +159,7 @@ const Demo = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div>
-                <h3 className="text-2xl font-bold mb-6" style={{ color: "#1A1D24" }}>
+                <h3 className="text-2xl font-semibold mb-6" style={{ color: "#1A1D24" }}>
                   Ce que vous obtiendrez :
                 </h3>
                 <div className="space-y-4">
@@ -211,7 +211,7 @@ const Demo = () => {
         <section className="py-20" style={{ background: "transparent" }}>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4" style={{ color: "#1A1D24" }}>
+              <h2 className="text-3xl font-semibold mb-4" style={{ color: "#1A1D24" }}>
                 Questions fréquentes sur la démo
               </h2>
             </div>

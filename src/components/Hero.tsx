@@ -17,6 +17,12 @@ type Phase = "visible" | "exiting" | "entering";
 const Hero = () => {
   const [displayedIndex, setDisplayedIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("visible");
+  const [heroVisible, setHeroVisible] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setHeroVisible(true), 80);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -69,14 +75,21 @@ const Hero = () => {
   return (
     <section
       style={{
-        background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #faeadb 100%)",
+        background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #e8f0fe 100%)",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
       }}
     >
-      <div className="flex flex-col items-center text-center px-4 py-20 max-w-2xl mx-auto">
+      <div
+        className="flex flex-col items-center text-center px-4 py-20 max-w-2xl mx-auto"
+        style={{
+          opacity: heroVisible ? 1 : 0,
+          transform: heroVisible ? "translateY(0)" : "translateY(24px)",
+          transition: "opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1)",
+        }}
+      >
         {/* Logo / Silhouette */}
         <img
           src="/logo-original.svg"
@@ -119,7 +132,7 @@ const Hero = () => {
         <Link
           to="/solution"
           style={{
-            backgroundColor: "#1a1d24",
+            backgroundColor: "#0A0E3D",
             color: "#fff",
             borderRadius: "28px",
             padding: "13px 28px",

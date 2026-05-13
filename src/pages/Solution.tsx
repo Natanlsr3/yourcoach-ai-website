@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 
 // ─── Color tokens ────────────────────────────────────────────────
@@ -10,7 +10,7 @@ const BG_ALT  = "transparent";
 const FG      = "#1a1d24";
 const FG_MUT  = "#717a8a";
 const BLUE    = "#3b9eff";
-const DARK_BG = "#161b29";  // hero vidéo section reste sombre
+const DARK_BG = "#0A0E3D";  // hero vidéo section reste sombre
 
 // ─── Shared style primitives ─────────────────────────────────────
 const serif: React.CSSProperties = {
@@ -84,7 +84,7 @@ const introText: React.CSSProperties = {
 
 const btnPrimary: React.CSSProperties = {
   ...sans,
-  backgroundColor: FG,
+  backgroundColor: "#0A0E3D",
   color: "#ffffff",
   borderRadius: "28px",
   padding: "13px 28px",
@@ -112,6 +112,9 @@ const btnSecondary: React.CSSProperties = {
 const TABS = ["Hôtel", "Salle de sport", "Entreprise"] as const;
 type Tab = typeof TABS[number];
 
+// ── Sélecteur style ── false = ancien (85vh glass), true = nouveau (60vh cas d'usage expansion)
+const USE_EXPANDED_SELECTOR = true;
+
 // ─── Component ───────────────────────────────────────────────────
 const Solution = () => {
   useDocumentTitle("YourCoach AI — Coach Virtuel pour Hôtels");
@@ -121,8 +124,39 @@ const Solution = () => {
   const processStepsRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const nextSectionRef = useRef<HTMLDivElement>(null);
+  const metricsRef = useRef<HTMLDivElement>(null);
+  const bloc1CardRef = useRef<HTMLDivElement>(null);
 
+  const location = useLocation();
   const [activeTab, setActiveTab]     = useState<Tab>("Hôtel");
+  const [metricsVisible, setMetricsVisible] = useState(false);
+  const [counters, setCounters] = useState([0, 0, 0, 0]);
+
+  // ─── Responsive ─────────────────────────────
+  const [winW, setWinW] = useState(typeof window !== "undefined" ? window.innerWidth : 1280);
+  useEffect(() => {
+    const onResize = () => setWinW(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  const isMobile = winW < 768;
+  const isCompact = winW < 1100;
+
+  // Si on arrive avec #avantages (ou hashchange en cours de page), forcer Hôtel + scroll
+  useEffect(() => {
+    const scrollToAvantages = () => {
+      if (window.location.hash === "#avantages") {
+        setActiveTab("Hôtel");
+        setTimeout(() => {
+          const el = document.getElementById("avantages");
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 400);
+      }
+    };
+    scrollToAvantages();
+    window.addEventListener("hashchange", scrollToAvantages);
+    return () => window.removeEventListener("hashchange", scrollToAvantages);
+  }, []);
   const [visibleSteps, setVisibleSteps] = useState<boolean[]>([false, false, false, false]);
   const [hoveredCard, setHoveredCard] = useState<Tab | null>(null);
   const [progress, setProgress]       = useState<Record<string, number>>({});
@@ -137,9 +171,9 @@ const Solution = () => {
       label: "Hôtel de luxe",
       title: "Pour vos clients en séjour",
       sub: "24/7 · Multilingue · White label",
-      accentColor: "#d4960a",
-      borderColor: "rgba(212,150,10,0.30)",
-      shadowColor: "rgba(212,150,10,0.15)",
+      accentColor: "#3b9eff",
+      borderColor: "rgba(59,158,255,0.30)",
+      shadowColor: "rgba(59,158,255,0.15)",
       bgColor:     "rgba(255,255,255,0.52)",
     },
     {
@@ -157,9 +191,9 @@ const Solution = () => {
       label: "Entreprise",
       title: "Pour vos équipes",
       sub: "Bien-être · Prévention · ROI",
-      accentColor: "#8b5cf6",
-      borderColor: "rgba(139,92,246,0.28)",
-      shadowColor: "rgba(139,92,246,0.13)",
+      accentColor: "#1a56db",
+      borderColor: "rgba(26,86,219,0.28)",
+      shadowColor: "rgba(26,86,219,0.13)",
       bgColor:     "rgba(255,255,255,0.52)",
     },
   ];
@@ -180,61 +214,72 @@ const Solution = () => {
 
   const bloc2Ref = useRef<HTMLDivElement>(null);
 
+  // Un seul scroll listener unifié, throttlé par rAF
+  const rafRef = useRef(0);
   useEffect(() => {
     const onScroll = () => {
-      const el = sectionRef.current;
-      if (!el) return;
-      const y   = window.scrollY;
-      const dir = y < lastScrollRef.current;
-      lastScrollRef.current = y;
-      setScrollingUp(dir);
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = 0;
+        const y = window.scrollY;
 
-      const rect     = el.getBoundingClientRect();
-      const scrolled = -rect.top;
-      const total    = el.offsetHeight - window.innerHeight;
-      const progress = Math.max(0, Math.min(1, scrolled / total));
-      if      (progress >= 0.55) setVisibleItems(3);
-      else if (progress >= 0.38) setVisibleItems(2);
-      else if (progress >= 0.20) setVisibleItems(1);
-      else                       setVisibleItems(0);
-      setTitleParallax(progress * -30);
-      setSectionProgress(progress);
+        // Direction scroll
+        const dir = y < lastScrollRef.current;
+        lastScrollRef.current = y;
+        setScrollingUp(dir);
+
+        // BLOC 1 sticky progress
+        const el = sectionRef.current;
+        if (el) {
+          const rect     = el.getBoundingClientRect();
+          const scrolled = -rect.top;
+          // Pills animent sur les premiers 80vh de scroll (zone BLOC 1 uniquement)
+          const total    = window.innerHeight * 0.8;
+          const progress = Math.max(0, Math.min(1, scrolled / total));
+          if      (progress >= 0.55) setVisibleItems(3);
+          else if (progress >= 0.38) setVisibleItems(2);
+          else if (progress >= 0.20) setVisibleItems(1);
+          else                       setVisibleItems(0);
+          setTitleParallax(progress * -30);
+          setSectionProgress(progress);
+        }
+
+        // Hero blur — opacity overlay au lieu de filter blur dynamique
+        if (heroBgRef.current) {
+          const vh = window.innerHeight;
+          const blurProgress = Math.max(0, Math.min(1, y / (vh * 0.6)));
+          heroBgRef.current.style.opacity = String(1 - blurProgress * 0.4);
+        }
+
+        // Parallax hero content — facteur réduit pour rester cohérent avec les métriques
+        const next = nextSectionRef.current;
+        const content = heroContentRef.current;
+        if (next && content) {
+          const rect = next.getBoundingClientRect();
+          const overlap = window.innerHeight - rect.top;
+          content.style.transform = overlap > 0 ? `translateY(${-overlap * 0.05}px)` : "translateY(0)";
+        }
+
+        // BLOC 1 card — scale up quand le centre arrive au centre du viewport
+        const card = bloc1CardRef.current;
+        if (card) {
+          const r = card.getBoundingClientRect();
+          const cardCenter = r.top + r.height / 2;
+          const vpCenter = window.innerHeight / 2;
+          const dist = Math.abs(cardCenter - vpCenter);
+          const maxDist = window.innerHeight;
+          const t = Math.max(0, Math.min(1, 1 - dist / maxDist));
+          const s = 0.70 + t * 0.26; // 0.70 → 0.96
+          card.style.transform = `scale(${s})`;
+        }
+      });
     };
 
-    const onScrollBlur = () => {
-      if (!heroBgRef.current) return;
-      const vh = window.innerHeight;
-      // Le sélecteur entre dans le viewport depuis le bas dès scrollY > 0
-      // On atteint le flou max quand le sélecteur couvre ~60% du hero (scrollY ≈ 0.6 * vh)
-      const blurProgress = Math.max(0, Math.min(1, window.scrollY / (vh * 0.6)));
-      const blurValue    = blurProgress * 10;
-      heroBgRef.current.style.filter = blurValue > 0 ? `blur(${blurValue}px)` : "";
-    };
-
-    window.addEventListener("scroll", onScroll,     { passive: true });
-    window.addEventListener("scroll", onScrollBlur, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("scroll", onScrollBlur);
+      cancelAnimationFrame(rafRef.current);
     };
-  }, []);
-
-  // Parallax: hero content remonte quand le sélecteur entre dans le viewport
-  useEffect(() => {
-    const onParallax = () => {
-      const next = nextSectionRef.current;
-      const content = heroContentRef.current;
-      if (!next || !content) return;
-      const rect = next.getBoundingClientRect();
-      const overlap = window.innerHeight - rect.top;
-      if (overlap > 0) {
-        content.style.transform = `translateY(${-overlap * 0.15}px)`;
-      } else {
-        content.style.transform = "translateY(0)";
-      }
-    };
-    window.addEventListener("scroll", onParallax, { passive: true });
-    return () => window.removeEventListener("scroll", onParallax);
   }, []);
 
   useEffect(() => {
@@ -283,6 +328,40 @@ const Solution = () => {
     };
   }, [activeTab]);
 
+  // Observer pour bandeau métriques — animation au premier scroll
+  useEffect(() => {
+    const el = metricsRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMetricsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Counter animation — défilement des chiffres
+  useEffect(() => {
+    if (!metricsVisible) return;
+    const targets = [24, 5, 24, 0];
+    const duration = 1400;
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setCounters(targets.map(v => Math.round(eased * v)));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [metricsVisible]);
+
   const completeCard = (id: Tab) => {
     clearInterval(intervalRef.current[id]);
     setActiveTab(id);
@@ -302,7 +381,7 @@ const Solution = () => {
   const OVERLAY_BG: Record<Tab, string> = {
     "Hôtel":          "linear-gradient(160deg, rgba(235,246,255,0.97) 0%, rgba(210,235,255,0.95) 60%, rgba(190,220,255,0.93) 100%)",
     "Salle de sport": "linear-gradient(160deg, rgba(235,255,247,0.97) 0%, rgba(200,245,225,0.95) 60%, rgba(175,230,210,0.93) 100%)",
-    "Entreprise":     "linear-gradient(160deg, rgba(248,245,255,0.97) 0%, rgba(230,220,255,0.95) 60%, rgba(215,205,255,0.93) 100%)",
+    "Entreprise":     "linear-gradient(160deg, rgba(235,242,255,0.97) 0%, rgba(210,225,255,0.95) 60%, rgba(195,215,255,0.93) 100%)",
   };
 
   return (
@@ -327,41 +406,49 @@ const Solution = () => {
         {/* ── Wrapper hero + sélecteur (sticky limité) ── */}
         <div ref={selectorRef} style={{ position: "relative" }}>
 
-        {/* ── BLOC 0 — Hero ── */}
-        <section style={{ minHeight: "100vh", position: "relative", zIndex: 1, overflow: "hidden" }}>
+        {/* ── BLOC 0 — Hero (sticky : le fond reste, le sélecteur glisse par-dessus) ── */}
+        <section style={{ position: "relative", zIndex: 1, paddingBottom: "15vh" }}>
 
-          {/* Fond ciel bleu profond */}
+          {/* Fond ciel bleu — couvre toute la section (y compris le padding) */}
           <div ref={heroBgRef} style={{
             position: "absolute", inset: 0,
-            background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #faeadb 100%)",
-            transition: "filter 0.1s linear",
+            background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #e8f0fe 100%)",
+            willChange: "opacity",
           }} />
 
-          {/* Contenu principal */}
-          <div ref={heroContentRef} style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", alignItems: "center", transition: "transform 0.05s linear" }}>
+          <div style={{ position: "sticky", top: 0, minHeight: "100vh" }}>
+
+            {/* Contenu principal */}
+            <div ref={heroContentRef} style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", flexDirection: "column", alignItems: "center", transition: "transform 0.05s linear" }}>
 
             {/* Titres — en haut, centrés */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", paddingTop: "80px", marginBottom: "40px" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", paddingTop: "80px", marginBottom: isCompact ? "24px" : "40px" }}>
               <h1 style={{
                 fontFamily: "'DM Serif Display', Georgia, serif",
-                fontSize: "82px", color: "#0A0E3D",
-                letterSpacing: "-3.5px", lineHeight: 1.0,
+                fontSize: isMobile ? "36px" : isCompact ? "52px" : "82px",
+                color: "#0A0E3D",
+                letterSpacing: isMobile ? "-1px" : isCompact ? "-2px" : "-3.5px",
+                lineHeight: 1.0,
                 margin: "0 0 16px",
+                padding: isCompact ? "0 20px" : undefined,
               }}>Votre Coach sans contraintes</h1>
               <p style={{
                 fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
-                fontSize: "17px", color: "rgba(15,23,42,0.48)",
-                maxWidth: "400px", lineHeight: 1.6, margin: 0,
+                fontSize: isMobile ? "15px" : "17px",
+                color: "rgba(15,23,42,0.48)",
+                maxWidth: isMobile ? "90%" : "400px",
+                lineHeight: 1.6,
+                margin: 0,
               }}>La technologie et l'expertise humaine,<br />au service de votre performance.</p>
             </div>
 
             {/* Grid 3 colonnes */}
-            <div style={{ display: "grid", gridTemplateColumns: "380px auto 380px", alignItems: "center", gap: "52px", width: "100%", maxWidth: "1340px", margin: "0 auto" }}>
+            <div style={{ display: isCompact ? "flex" : "grid", flexDirection: isCompact ? "column" : undefined, gridTemplateColumns: isCompact ? undefined : "1fr auto 1fr", alignItems: "center", gap: isMobile ? "24px" : isCompact ? "32px" : "52px", width: "100%", maxWidth: "1340px", margin: "0 auto", padding: isCompact ? "0 20px" : undefined }}>
 
               {/* Colonne gauche */}
-              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "flex-end", height: "600px" }}>
+              <div style={{ order: isCompact ? 2 : undefined, display: "flex", flexDirection: isCompact ? (isMobile ? "column" : "row") : "column", justifyContent: "center", gap: isCompact ? "16px" : "28px", alignItems: isCompact ? "stretch" : "flex-end", height: isCompact ? "auto" : "600px", width: isCompact ? "100%" : undefined }}>
 
-                <div style={{ width: "350px", borderRadius: "22px", padding: "28px 28px",
+                <div style={{ width: isCompact ? undefined : "350px", maxWidth: "350px", flex: isCompact ? "1 1 0" : undefined, borderRadius: "22px", padding: isCompact ? "24px" : "28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
@@ -370,11 +457,11 @@ const Solution = () => {
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: "12px", display: "block" }}>
                     <path d="M12 21C12 21 3 15.5 3 9.5C3 7 5 5 7.5 5C9.24 5 10.91 6.01 12 7.09C13.09 6.01 14.76 5 16.5 5C19 5 21 7 21 9.5C21 15.5 12 21 12 21Z" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 700, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>Relation de confiance</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 600, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>Relation de confiance</p>
                   <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "#717A8A", lineHeight: 1.55, margin: 0 }}>Un coach qui vous connaît, s'adapte et crée un vrai lien dans la durée.</p>
                 </div>
 
-                <div style={{ width: "350px", borderRadius: "22px", padding: "28px 28px",
+                <div style={{ width: isCompact ? undefined : "350px", maxWidth: "350px", flex: isCompact ? "1 1 0" : undefined, borderRadius: "22px", padding: isCompact ? "24px" : "28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
@@ -389,16 +476,17 @@ const Solution = () => {
                     <line x1="17.7" y1="8.2" x2="14" y2="11" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" />
                     <line x1="12" y1="14.5" x2="12" y2="18" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 700, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>IA × Coachs & Médecins</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 600, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>IA × Coachs & Médecins</p>
                   <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "#717A8A", lineHeight: 1.55, margin: 0 }}>Algorithmes co-construits avec des experts. Chaque recommandation validée.</p>
                 </div>
 
               </div>
 
               {/* Colonne centrale — smartphone */}
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <div style={{ order: isCompact ? 1 : undefined, display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <div style={{
-                  width: "300px", height: "600px",
+                  width: isMobile ? "220px" : isCompact ? "260px" : "300px",
+                  height: isMobile ? "440px" : isCompact ? "520px" : "600px",
                   background: "#f4f4f2",
                   borderRadius: "50px",
                   border: "8px solid #1a1a1a",
@@ -426,9 +514,9 @@ const Solution = () => {
               </div>
 
               {/* Colonne droite */}
-              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "flex-start", height: "600px" }}>
+              <div style={{ order: isCompact ? 3 : undefined, display: "flex", flexDirection: isCompact ? (isMobile ? "column" : "row") : "column", justifyContent: "center", gap: isCompact ? "16px" : "28px", alignItems: isCompact ? "stretch" : "flex-start", height: isCompact ? "auto" : "600px", width: isCompact ? "100%" : undefined }}>
 
-                <div style={{ width: "350px", borderRadius: "22px", padding: "28px 28px",
+                <div style={{ width: isCompact ? undefined : "350px", maxWidth: "350px", flex: isCompact ? "1 1 0" : undefined, borderRadius: "22px", padding: isCompact ? "24px" : "28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
@@ -438,11 +526,11 @@ const Solution = () => {
                     <path d="M4 17C6 17 8 14 10 12C12 10 13 9 14 9C16 9 17 11 19 13" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" />
                     <path d="M17 11L19 13L21 11" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 700, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>Évolue à chaque séance</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 600, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>Évolue à chaque séance</p>
                   <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "#717A8A", lineHeight: 1.55, margin: 0 }}>Le coach apprend de chaque session. Plus vous l'utilisez, plus il vous connaît.</p>
                 </div>
 
-                <div style={{ width: "350px", borderRadius: "22px", padding: "28px 28px",
+                <div style={{ width: isCompact ? undefined : "350px", maxWidth: "350px", flex: isCompact ? "1 1 0" : undefined, borderRadius: "22px", padding: isCompact ? "24px" : "28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
@@ -454,7 +542,7 @@ const Solution = () => {
                     <path d="M12 8.5L14 11L17 10" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M10 14L13 15L15 19" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 700, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>Démonstration des mouvements</p>
+                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "14px", fontWeight: 600, color: "#1A1D24", margin: "0 0 6px", lineHeight: 1.3 }}>Démonstration des mouvements</p>
                   <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "12px", color: "#717A8A", lineHeight: 1.55, margin: 0 }}>Chaque exercice démontré en temps réel par l'avatar 3D.</p>
                 </div>
 
@@ -464,75 +552,145 @@ const Solution = () => {
 
           </div>
 
-        </section>
-
-        {/* ══════════════════════════════════════════
-            TEST C — 4 cards hover expand (masqué)
-        ══════════════════════════════════════════ */}
-        <div style={{ display: "none" }}>
-        <section style={{ height: "100vh", background: "transparent", display: "flex", flexDirection: "row", overflow: "hidden", position: "relative" }}>
-
-          <div style={{ position: "absolute", top: "16px", left: "16px", zIndex: 10, fontSize: "10px", color: "rgba(0,0,0,0.2)", fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif" }}>VERSION C</div>
-
-          {([
-            { img: "/relation_de_confiance.jpg",   title: "Relation de confiance",        text: "Un coach qui vous connaît, s'adapte et crée un vrai lien dans la durée." },
-            { img: "/IAxcoachs.jpg",               title: "IA × Coachs & Médecins",       text: "Algorithmes co-construits avec des experts. Chaque recommandation validée." },
-            { img: "/homme-progres-gym.jpg",       title: "Évolue à chaque séance",       text: "Le coach apprend de chaque session. Plus vous l'utilisez, plus il vous connaît." },
-            { img: "/demonstration-mouvement.jpg", title: "Démonstration des mouvements", text: "Chaque exercice démontré en temps réel par l'avatar 3D pour une exécution parfaite." },
-          ] as const).map((card) => (
-            <div
-              key={card.title}
-              onMouseEnter={(e) => {
-                const container = e.currentTarget.parentElement;
-                if (!container) return;
-                Array.from(container.children).forEach((child) => {
-                  const el = child as HTMLElement;
-                  if (el.dataset.versionLabel) return;
-                  el.style.flex = "0.33";
-                  const ov = el.querySelector<HTMLElement>("[data-overlay]");
-                  if (ov) ov.style.background = "rgba(0,0,0,0.25)";
-                  const desc = el.querySelector<HTMLElement>("[data-desc]");
-                  if (desc) { desc.style.opacity = "0"; desc.style.transform = "translateY(8px)"; }
-                  const ttl = el.querySelector<HTMLElement>("[data-title]");
-                  if (ttl) { ttl.style.fontSize = "14px"; ttl.style.fontFamily = "-apple-system, BlinkMacSystemFont, sans-serif"; }
-                });
-                e.currentTarget.style.flex = "3";
-                const ov = e.currentTarget.querySelector<HTMLElement>("[data-overlay]");
-                if (ov) ov.style.background = "rgba(0,0,0,0.45)";
-                const desc = e.currentTarget.querySelector<HTMLElement>("[data-desc]");
-                if (desc) { desc.style.opacity = "1"; desc.style.transform = "translateY(0)"; }
-                const ttl = e.currentTarget.querySelector<HTMLElement>("[data-title]");
-                if (ttl) { ttl.style.fontSize = "22px"; ttl.style.fontFamily = "'DM Serif Display', Georgia, serif"; }
-              }}
-              onMouseLeave={(e) => {
-                const container = e.currentTarget.parentElement;
-                if (!container) return;
-                Array.from(container.children).forEach((child) => {
-                  const el = child as HTMLElement;
-                  if (el.dataset.versionLabel) return;
-                  el.style.flex = "1";
-                  const ov = el.querySelector<HTMLElement>("[data-overlay]");
-                  if (ov) ov.style.background = "rgba(0,0,0,0.25)";
-                  const desc = el.querySelector<HTMLElement>("[data-desc]");
-                  if (desc) { desc.style.opacity = "0"; desc.style.transform = "translateY(8px)"; }
-                  const ttl = el.querySelector<HTMLElement>("[data-title]");
-                  if (ttl) { ttl.style.fontSize = "14px"; ttl.style.fontFamily = "-apple-system, BlinkMacSystemFont, sans-serif"; }
-                });
-              }}
-              style={{ flex: 1, position: "relative", overflow: "hidden", cursor: "pointer", transition: "flex 0.5s cubic-bezier(0.4,0,0.2,1)" }}
-            >
-              <img src={card.img} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              <div data-overlay="" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.25)", transition: "background 0.4s ease", pointerEvents: "none" }} />
-              <div style={{ position: "absolute", bottom: "32px", left: "28px", right: "28px" }}>
-                <p data-title="" style={{ fontSize: "14px", fontWeight: 600, color: "#fff", fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", margin: "0 0 8px", transition: "font-size 0.3s ease" }}>{card.title}</p>
-                <p data-desc="" style={{ fontSize: "13px", color: "rgba(255,255,255,0.7)", fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", margin: 0, lineHeight: 1.55, opacity: 0, transform: "translateY(8px)", transition: "opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s" }}>{card.text}</p>
+          {/* ── BANDEAU CHIFFRES CLÉS ── */}
+          <div
+            ref={metricsRef}
+            style={{
+              position: "relative",
+              zIndex: 1,
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: isMobile ? "24px 40px" : "64px",
+              padding: isMobile ? "40px 20px 32px" : "48px 40px 56px",
+            }}
+          >
+            {[
+              { prefix: "", suffix: "/7", counterIdx: 0, label: "Disponibilité", delay: 0 },
+              { prefix: "", suffix: "+",  counterIdx: 1, label: "Langues supportées", delay: 0.1 },
+              { prefix: "<", suffix: "h", counterIdx: 2, label: "Déploiement", delay: 0.2 },
+              { prefix: "", suffix: "",   counterIdx: 3, label: "Personnel requis", delay: 0.3 },
+            ].map((item) => (
+              <div
+                key={item.label}
+                style={{
+                  textAlign: "center",
+                  opacity: metricsVisible ? 1 : 0,
+                  transform: metricsVisible ? "translateY(0)" : "translateY(20px)",
+                  transition: `opacity 0.7s cubic-bezier(0.4,0,0.2,1) ${item.delay}s, transform 0.7s cubic-bezier(0.4,0,0.2,1) ${item.delay}s`,
+                }}
+              >
+                <p style={{
+                  ...serif,
+                  fontSize: "40px",
+                  color: "#0A0E3D",
+                  letterSpacing: "-1.5px",
+                  margin: "0 0 4px",
+                  lineHeight: 1,
+                }}>
+                  {item.prefix}{counters[item.counterIdx]}{item.suffix}
+                </p>
+                <p style={{
+                  ...sans,
+                  fontSize: "13px",
+                  color: FG_MUT,
+                  margin: 0,
+                  lineHeight: 1.4,
+                }}>
+                  {item.label}
+                </p>
               </div>
-            </div>
-          ))}
-        </section>
-        </div>
+            ))}
+          </div>
 
-        {/* ── Sélecteur de version — cards 85vh ── */}
+          </div>{/* fin sticky */}
+        </section>
+
+        {USE_EXPANDED_SELECTOR ? (
+        /* ── Sélecteur V2 — cards cas d'usage avec expansion hover ── */
+        <section ref={nextSectionRef} style={{
+          width: "100%",
+          height: "65vh",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "12px",
+          padding: "0 80px",
+          boxSizing: "border-box",
+          position: "relative",
+          zIndex: 10,
+          borderRadius: "28px 28px 0 0",
+          marginTop: "0",
+        }}>
+          {[
+            { id: "Hôtel" as Tab, label: "Hôtel de luxe", title: "Pour vos clients en séjour", sub: "24/7 · Multilingue · White label", img: "/spa_hotel_luxe.jpg" },
+            { id: "Salle de sport" as Tab, label: "Salle de sport", title: "Pour vos adhérents", sub: "Engagement · Fidélisation · Performance", img: "/gym-salle.jpg" },
+            { id: "Entreprise" as Tab, label: "Entreprise", title: "Pour vos équipes", sub: "Bien-être · Prévention · ROI", img: "/entreprise.jpg" },
+          ].map((card) => {
+            const isHov = hoveredCard === card.id;
+            const isCollapsed = hoveredCard !== null && !isHov;
+            let cardFlex: number;
+            if (isHov) cardFlex = 2.3;
+            else if (isCollapsed) cardFlex = 0.6;
+            else cardFlex = 1;
+
+            return (
+              <div
+                key={card.id}
+                onClick={() => completeCard(card.id)}
+                onMouseEnter={() => setHoveredCard(card.id)}
+                onMouseLeave={() => setHoveredCard(null)}
+                style={{
+                  flex: cardFlex,
+                  height: isHov ? "96%" : "75%",
+                  cursor: "pointer",
+                  position: "relative",
+                  overflow: "hidden",
+                  borderRadius: "20px",
+                  transition: "flex 0.6s cubic-bezier(0.4,0,0.2,1), height 0.6s cubic-bezier(0.4,0,0.2,1)",
+                }}
+              >
+                <img src={card.img} alt="" loading="lazy" style={{
+                  position: "absolute", inset: 0, width: "100%", height: "100%",
+                  objectFit: "cover", objectPosition: "center", display: "block",
+                  transform: isHov ? "scale(1.005)" : "scale(1)",
+                  transition: "transform 0.55s cubic-bezier(0.4,0,0.2,1)",
+                }} />
+                <div style={{
+                  position: "absolute", inset: 0,
+                  background: "linear-gradient(to bottom, rgba(8,8,16,0.05) 0%, rgba(8,8,16,0.18) 40%, rgba(8,8,16,0.68) 100%)",
+                  pointerEvents: "none",
+                }} />
+                <div style={{
+                  position: "absolute", bottom: "32px", left: "28px", right: "28px", zIndex: 2,
+                  opacity: isCollapsed ? 0 : 1,
+                  transition: "opacity 0.4s ease",
+                }}>
+                  <p style={{ ...sans, fontSize: "12px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", color: "rgba(255,255,255,0.65)", margin: "0 0 10px" }}>
+                    {card.label}
+                  </p>
+                  <p style={{
+                    ...serif, fontSize: "26px", color: "#ffffff", lineHeight: 1.15,
+                    margin: "0 0 8px", textShadow: "0 2px 12px rgba(0,0,0,0.25)",
+                  }}>
+                    {card.title}
+                  </p>
+                  <p style={{
+                    ...sans, fontSize: "14px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6, margin: 0,
+                    opacity: isHov ? 1 : 0,
+                    maxHeight: isHov ? "40px" : "0px",
+                    overflow: "hidden",
+                    transition: "opacity 0.35s ease 0.15s, max-height 0.35s ease",
+                  }}>
+                    {card.sub}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </section>
+        ) : (
+        /* ── Sélecteur V1 — cards 85vh (ancien, USE_EXPANDED_SELECTOR = false pour restaurer) ── */
         <section ref={nextSectionRef} style={{
           width: "100%",
           height: "85vh",
@@ -545,7 +703,8 @@ const Solution = () => {
           position: "relative",
           zIndex: 10,
           borderRadius: "28px 28px 0 0",
-          marginTop: "220px",
+          marginTop: "0",
+          backgroundColor: "rgba(255,255,255,0.97)",
         }}>
           {[
             {
@@ -571,12 +730,12 @@ const Solution = () => {
             {
               id:         TAB_CONFIGS[2].id,
               bg:         "rgba(255,255,255,0.52)",
-              glassColor: "rgba(139,92,246,0.08)",
+              glassColor: "rgba(26,86,219,0.08)",
               label:      TAB_CONFIGS[2].label,
               title:      TAB_CONFIGS[2].title,
               sub:        TAB_CONFIGS[2].sub,
-              labelColor: "#7c3aed",
-              accent:     "#8b5cf6",
+              labelColor: "#1a56db",
+              accent:     "#1a56db",
             },
           ].map((card) => {
             const isHov  = hoveredCard === card.id;
@@ -640,6 +799,7 @@ const Solution = () => {
                     <img
                       src={imgSrc}
                       alt=""
+                      loading="lazy"
                       style={{
                         position: "absolute",
                         inset: 0,
@@ -746,6 +906,7 @@ const Solution = () => {
             );
           })}
         </section>
+        )}
         </div>{/* fin wrapper hero + sélecteur */}
 
         {/* ── Espacement après sélecteur ── */}
@@ -755,22 +916,24 @@ const Solution = () => {
         <div ref={contentRef}>
         {activeTab === "Hôtel" && <>
 
-        {/* ── BLOC 1 — Header hôtel — 2 photos fond + sticky scroll ── */}
-        <div ref={sectionRef} style={{ height: "250vh", position: "relative" }}>
-          <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex" }}>
+        {/* ── BLOC 1 + BLOC 2 — wrapper sticky layers ── */}
+        <div ref={sectionRef} style={{ position: "relative" }}>
+          {/* BLOC 1 — sticky layer 1 */}
+          <div style={{ position: "sticky", top: 0, height: "100vh", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 40px" }}>
+            <div ref={bloc1CardRef} style={{ width: "100%", height: "85vh", borderRadius: "28px", overflow: "hidden", position: "relative", boxShadow: "0 20px 60px rgba(0,0,0,0.15)", transform: "scale(0.70)", transition: "transform 0.05s linear" }}>
 
             {/* Fond — 2 photos côte à côte (sans séparateur) */}
             <div style={{ position: "absolute", inset: 0, display: "flex" }}>
 
               {/* Photo gauche — gym */}
               <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
-                <img src="/Gym_hotel_luxe.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block", transform: `scale(${1 + sectionProgress * 0.05})`, transition: "transform 0.1s linear" }} />
+                <img src="/Gym_hotel_luxe.jpg" alt="" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(8,8,12,0.55) 0%, rgba(8,8,12,0.35) 100%)" }} />
               </div>
 
               {/* Photo droite — spa */}
               <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
-                <img src="/spa_hotel_luxe.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block", transform: `scale(${1 + sectionProgress * 0.05})`, transition: "transform 0.1s linear" }} />
+                <img src="/spa_hotel_luxe.jpg" alt="" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to left, rgba(8,8,12,0.55) 0%, rgba(8,8,12,0.35) 100%)" }} />
               </div>
             </div>
@@ -827,14 +990,12 @@ const Solution = () => {
                         padding: "18px 36px",
                         width: "fit-content",
                         margin: "0 auto",
-                        opacity: visibleItems > index ? (index === visibleItems - 1 ? 1 : 0.75) : 0,
-                        transform: index === visibleItems - 1
-                          ? "translateY(0) scale(1.05)"
-                          : visibleItems > index
-                            ? "translateY(0) scale(1.0)"
-                            : "translateY(12px) scale(0.95)",
-                        transition: "opacity 0.6s ease, transform 0.6s cubic-bezier(0.4,0,0.2,1)",
-                        transitionDelay: scrollingUp ? `${(2 - index) * 0.12}s` : `${index * 0.15}s`,
+                        opacity: visibleItems > index ? 1 : 0,
+                        transform: visibleItems > index
+                          ? "translateY(0)"
+                          : "translateY(16px)",
+                        transition: "opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1)",
+                        transitionDelay: `${index * 0.2}s`,
                       }}
                     >
                       <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#ffffff", flexShrink: 0 }} />
@@ -854,10 +1015,52 @@ const Solution = () => {
 
               </div>
             </div>
+            </div>{/* fin card arrondie */}
           </div>
-        </div>
 
-        {/* ── BLOC 2 — Le problème — Eight Sleep style ── */}
+        {/* Espace de scroll pour scaling carte + pills */}
+        <div style={{ height: "80vh" }} />
+
+        {/* ── BLOC 3 — "Notre solution" — sticky derrière BLOC 2, révélé quand BLOC 2 part ── */}
+        <section id="avantages" style={{ backgroundColor: "#F5F1EA", minHeight: "100vh", padding: "96px 80px", display: "flex", alignItems: "center", position: "sticky", top: 0, zIndex: 2 }}>
+          <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
+            <span style={labelStyle}>Notre solution</span>
+            <h2 style={h2Style}>3 leviers business</h2>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginTop: "52px" }}>
+              {[
+                {
+                  tag: "Service autonome",
+                  tagStyle: { backgroundColor: "rgba(59,158,255,0.10)", border: "1px solid rgba(59,158,255,0.25)", color: "hsl(210, 85%, 40%)" },
+                  title: "Un service wellness premium, sans ressource humaine",
+                  text: "Disponible 24h/24, 7j/7, en multilingue. Aucun recrutement, aucune gestion. YourCoach AI fonctionne en totale autonomie.",
+                },
+                {
+                  tag: "Expérience différenciante",
+                  tagStyle: { backgroundColor: "rgba(255,255,255,0.6)", border: "1px solid rgba(0,0,0,0.12)", color: "hsl(220, 15%, 25%)" },
+                  title: "Une expérience client activable immédiatement",
+                  text: "Différenciation technologique, personnalisation par profil, déployé en marque blanche aux couleurs de votre établissement.",
+                },
+                {
+                  tag: "Revenus additionnels",
+                  tagStyle: { backgroundColor: "rgba(26,86,219,0.10)", border: "1px solid rgba(26,86,219,0.25)", color: "hsl(221, 79%, 40%)" },
+                  title: "Activation des revenus annexes",
+                  text: "Upsell intelligent, cross-selling intégré. Chaque interaction devient une opportunité de valoriser vos services.",
+                },
+              ].map((item) => (
+                <div key={item.tag} style={glassCardLg}>
+                  <span style={{ ...sans, borderRadius: "12px", padding: "4px 12px", fontSize: "11px", ...item.tagStyle }}>
+                    {item.tag}
+                  </span>
+                  <p style={{ ...serif, fontSize: "20px", color: FG, marginTop: "20px", marginBottom: "0", lineHeight: 1.2 }}>{item.title}</p>
+                  <p style={{ ...sans, fontSize: "14px", color: FG_MUT, lineHeight: 1.7, marginTop: "12px", marginBottom: 0 }}>{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── BLOC 2 — "Le voyageur moderne" — foreground, glisse par-dessus BLOC 1 puis repart en révélant BLOC 3 ── */}
         <section
           ref={bloc2Ref}
           style={{
@@ -869,7 +1072,11 @@ const Solution = () => {
             alignItems: "center",
             justifyContent: "center",
             position: "relative",
+            zIndex: 3,
             overflow: "hidden",
+            borderRadius: "24px",
+            boxShadow: "0 20px 60px rgba(10,14,61,0.3), 0 -20px 60px rgba(10,14,61,0.3)",
+            marginTop: "-100vh",
           }}
         >
           {/* Orbes décoratifs */}
@@ -991,44 +1198,9 @@ const Solution = () => {
           </div>
         </section>
 
-        {/* ── BLOC 3 — 3 leviers business — fond impair ── */}
-        <section style={{ backgroundColor: BG, padding: "96px 80px" }}>
-          <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
-            <span style={labelStyle}>Notre solution</span>
-            <h2 style={h2Style}>3 leviers business</h2>
-
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginTop: "52px" }}>
-              {[
-                {
-                  tag: "Service autonome",
-                  tagStyle: { backgroundColor: "rgba(59,158,255,0.10)", border: "1px solid rgba(59,158,255,0.25)", color: "hsl(210, 85%, 40%)" },
-                  title: "Un service wellness premium, sans ressource humaine",
-                  text: "Disponible 24h/24, 7j/7, en multilingue. Aucun recrutement, aucune gestion. YourCoach AI fonctionne en totale autonomie.",
-                },
-                {
-                  tag: "Expérience différenciante",
-                  tagStyle: { backgroundColor: "rgba(255,255,255,0.6)", border: "1px solid rgba(0,0,0,0.12)", color: "hsl(220, 15%, 25%)" },
-                  title: "Une expérience client activable immédiatement",
-                  text: "Différenciation technologique, personnalisation par profil, déployé en marque blanche aux couleurs de votre établissement.",
-                },
-                {
-                  tag: "Revenus additionnels",
-                  tagStyle: { backgroundColor: "rgba(224,122,53,0.10)", border: "1px solid rgba(224,122,53,0.25)", color: "hsl(28, 75%, 38%)" },
-                  title: "Activation des revenus annexes",
-                  text: "Upsell intelligent, cross-selling intégré. Chaque interaction devient une opportunité de valoriser vos services.",
-                },
-              ].map((item) => (
-                <div key={item.tag} style={glassCardLg}>
-                  <span style={{ ...sans, borderRadius: "12px", padding: "4px 12px", fontSize: "11px", ...item.tagStyle }}>
-                    {item.tag}
-                  </span>
-                  <p style={{ ...serif, fontSize: "20px", color: FG, marginTop: "20px", marginBottom: "0", lineHeight: 1.2 }}>{item.title}</p>
-                  <p style={{ ...sans, fontSize: "14px", color: FG_MUT, lineHeight: 1.7, marginTop: "12px", marginBottom: 0 }}>{item.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Espace pour que BLOC 3 reste sticky pendant toute la sortie de BLOC 2 + temps de lecture */}
+        <div style={{ height: "150vh" }} />
+        </div>{/* fin wrapper sticky layers */}
 
         {/* ── BLOC 4 — Technologie — fond pair ── */}
         <section style={{ backgroundColor: BG_ALT, padding: "96px 80px" }}>
@@ -1093,6 +1265,7 @@ const Solution = () => {
                   <img
                     src={item.img}
                     alt=""
+                    loading="lazy"
                     style={{
                       position: "absolute",
                       inset: 0,
@@ -1265,7 +1438,7 @@ const Solution = () => {
             </p>
             <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
               <Link to="/contact" style={btnPrimary}>
-                Demander un call de découverte
+                Planifier mon call
               </Link>
               <a href="mailto:natan.lasar@mikevirtualcoach.com" style={btnSecondary}>
                 Nous écrire
@@ -1279,7 +1452,7 @@ const Solution = () => {
 
         </>}
 
-        {(activeTab === "Salle de sport" || activeTab === "Entreprise") && (
+        {activeTab === "Salle de sport" && (
           <section style={{
             minHeight: "80vh",
             display: "flex",
@@ -1308,7 +1481,7 @@ const Solution = () => {
                 display: "block",
                 marginBottom: "20px",
               }}>
-                {activeTab === "Salle de sport" ? "Salle de sport" : "Entreprise"}
+                Salle de sport
               </span>
               <h2 style={{
                 ...serif,
@@ -1318,7 +1491,7 @@ const Solution = () => {
                 lineHeight: 1.1,
                 margin: "0 0 16px",
               }}>
-                À venir bientôt
+                Fidélisez vos adhérents
               </h2>
               <p style={{
                 ...sans,
@@ -1327,25 +1500,94 @@ const Solution = () => {
                 lineHeight: 1.7,
                 margin: "0 0 40px",
               }}>
-                Cette section est en cours de préparation.<br />
-                Revenez bientôt pour découvrir notre offre {activeTab === "Salle de sport" ? "Salle de sport" : "Entreprise"}.
+                Offrez à vos membres un coach IA personnalisé qui booste l'engagement et réduit le churn. Parlons de votre salle.
               </p>
-              <button
-                onClick={() => selectorRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })}
+              <Link
+                to="/contact"
                 style={{
                   ...sans,
-                  backgroundColor: FG,
+                  backgroundColor: "#0A0E3D",
                   color: "#fff",
                   borderRadius: "28px",
                   padding: "13px 28px",
                   fontSize: "14px",
                   fontWeight: 600,
-                  border: "none",
-                  cursor: "pointer",
+                  textDecoration: "none",
+                  display: "inline-block",
                 }}
               >
-                ← Choisir un établissement
-              </button>
+                Discuter de mon projet
+              </Link>
+            </div>
+          </section>
+        )}
+
+        {activeTab === "Entreprise" && (
+          <section style={{
+            minHeight: "80vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            padding: "120px 40px",
+          }}>
+            <div style={{
+              background: "rgba(255,255,255,0.52)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.85)",
+              borderRadius: "28px",
+              padding: "64px 80px",
+              maxWidth: "560px",
+            }}>
+              <span style={{
+                ...sans,
+                fontSize: "11px",
+                fontWeight: 600,
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                color: BLUE,
+                display: "block",
+                marginBottom: "20px",
+              }}>
+                Entreprise
+              </span>
+              <h2 style={{
+                ...serif,
+                fontSize: "42px",
+                color: FG,
+                letterSpacing: "-1.5px",
+                lineHeight: 1.1,
+                margin: "0 0 16px",
+              }}>
+                Le bien-être au travail
+              </h2>
+              <p style={{
+                ...sans,
+                fontSize: "15px",
+                color: FG_MUT,
+                lineHeight: 1.7,
+                margin: "0 0 40px",
+              }}>
+                Proposez à vos collaborateurs un accompagnement sport et bien-être personnalisé, directement sur leur smartphone.
+              </p>
+              <Link
+                to="/contact"
+                style={{
+                  ...sans,
+                  backgroundColor: "#0A0E3D",
+                  color: "#fff",
+                  borderRadius: "28px",
+                  padding: "13px 28px",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  display: "inline-block",
+                }}
+              >
+                Discuter de mon projet
+              </Link>
             </div>
           </section>
         )}
