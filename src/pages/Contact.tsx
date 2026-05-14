@@ -47,8 +47,7 @@ const Contact = () => {
                   marginBottom: 24,
                 }}
               >
-                Parlons de votre projet{" "}
-                <span style={{ fontStyle: "italic", color: BLUE_DEEP }}>bien-être</span>
+                Échangeons sur votre établissement
               </h1>
               <p
                 style={{

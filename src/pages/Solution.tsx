@@ -472,7 +472,7 @@ const Solution = () => {
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
-                  animation: "hero-float 4s ease-in-out 0s infinite",
+                  animation: "hero-float 4s cubic-bezier(0.4,0,0.2,1) 0s infinite",
                 }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: "12px", display: "block" }}>
                     <path d="M12 21C12 21 3 15.5 3 9.5C3 7 5 5 7.5 5C9.24 5 10.91 6.01 12 7.09C13.09 6.01 14.76 5 16.5 5C19 5 21 7 21 9.5C21 15.5 12 21 12 21Z" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -485,7 +485,7 @@ const Solution = () => {
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
-                  animation: "hero-float 4s ease-in-out 0.7s infinite",
+                  animation: "hero-float 4s cubic-bezier(0.4,0,0.2,1) 0.7s infinite",
                 }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: "12px", display: "block" }}>
                     <circle cx="12" cy="12" r="2.5" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" />
@@ -542,7 +542,7 @@ const Solution = () => {
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
-                  animation: "hero-float 4s ease-in-out 1.4s infinite",
+                  animation: "hero-float 4s cubic-bezier(0.4,0,0.2,1) 1.4s infinite",
                 }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: "12px", display: "block" }}>
                     <path d="M4 17C6 17 8 14 10 12C12 10 13 9 14 9C16 9 17 11 19 13" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" strokeLinecap="round" />
@@ -556,7 +556,7 @@ const Solution = () => {
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
                   border: "1px solid rgba(255,255,255,0.95)",
                   boxShadow: "0 10px 36px rgba(60,100,180,0.10), inset 0 1px 0 rgba(255,255,255,1)",
-                  animation: "hero-float 4s ease-in-out 2.1s infinite",
+                  animation: "hero-float 4s cubic-bezier(0.4,0,0.2,1) 2.1s infinite",
                 }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: "12px", display: "block" }}>
                     <circle cx="12" cy="4" r="1.5" stroke="rgba(30,80,180,0.55)" strokeWidth="1.5" />
@@ -1053,8 +1053,8 @@ const Solution = () => {
           }}
         >
           {/* Orbes décoratifs — animation lente P36 */}
-          <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "rgba(59,158,255,0.18)", filter: "blur(105px)", top: -100, left: -200, pointerEvents: "none", zIndex: 0, animation: "orb-drift-1 20s cubic-bezier(0.4,0,0.2,1) infinite", willChange: "transform" }} />
-          <div style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: "rgba(26,86,219,0.14)", filter: "blur(115px)", bottom: 0, right: -100, pointerEvents: "none", zIndex: 0, animation: "orb-drift-2 22s cubic-bezier(0.4,0,0.2,1) infinite", willChange: "transform" }} />
+          <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "rgba(59,158,255,0.32)", filter: "blur(105px)", top: -100, left: -200, pointerEvents: "none", zIndex: 0, animation: "orb-drift-1 20s cubic-bezier(0.4,0,0.2,1) infinite", willChange: "transform" }} />
+          <div style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: "rgba(26,86,219,0.22)", filter: "blur(115px)", bottom: 0, right: -100, pointerEvents: "none", zIndex: 0, animation: "orb-drift-2 22s cubic-bezier(0.4,0,0.2,1) infinite", willChange: "transform" }} />
 
           {/* Contenu */}
           <div style={{ position: "relative", zIndex: 1, maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
@@ -1303,9 +1303,9 @@ const Solution = () => {
                   items: ["Séance stretching débutant 20 min", "Guidage pas à pas avec démonstrations", "Conseils posture et respiration"],
                 },
               ].map((p) => (
-                <div key={p.name} style={{ display: "flex", flexDirection: "column", overflow: "hidden", padding: 0, borderRadius: "24px", transition: "transform 0.3s cubic-bezier(0.4,0,0.2,1)", cursor: "default" }} onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; }}>
-                  <div style={{ width: "100%", aspectRatio: "3/4", overflow: "hidden", borderRadius: "24px", position: "relative" }}>
-                    <img src={p.img} alt={p.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }} />
+                <div key={p.name} style={{ display: "flex", flexDirection: "column", overflow: "hidden", padding: 0, borderRadius: "24px", background: "transparent", transition: "transform 0.3s cubic-bezier(0.4,0,0.2,1)", cursor: "default" }} onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; }}>
+                  <div style={{ width: "100%", aspectRatio: "5/6", overflow: "hidden", borderRadius: "24px 24px 0 0", position: "relative" }}>
+                    <img src={p.img} alt={p.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 35%", display: "block" }} />
                     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%)", pointerEvents: "none" }} />
                     <div style={{ position: "absolute", bottom: "20px", left: "24px", right: "24px" }}>
                       <p style={{ ...serif, fontSize: "24px", color: "#fff", margin: "0 0 6px" }}>{p.name}</p>
@@ -1424,18 +1424,25 @@ const Solution = () => {
                     top: 0,
                     width: "30px",
                     height: "30px",
-                    borderRadius: "50%",
-                    backgroundColor: "#fff",
-                    border: `1px solid rgba(59,158,255,0.25)`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "12px",
-                    color: BLUE,
-                    fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
-                    fontWeight: 600,
                   }}>
-                    {step.num}
+                    <svg width="30" height="30" viewBox="0 0 30 30" style={{ position: "absolute" }}>
+                      <circle cx="15" cy="15" r="13.5" fill="#fff" stroke="none" />
+                      <circle
+                        cx="15" cy="15" r="13.5"
+                        fill="none"
+                        stroke={BLUE}
+                        strokeWidth="1"
+                        strokeDasharray={`${Math.PI * 27}`}
+                        strokeDashoffset={visibleSteps[i] ? 0 : Math.PI * 27}
+                        style={{ transition: `stroke-dashoffset 0.6s cubic-bezier(0.4,0,0.2,1) ${i * 0.12}s` }}
+                      />
+                    </svg>
+                    <span style={{ position: "relative", fontSize: "12px", color: BLUE, fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontWeight: 600 }}>
+                      {step.num}
+                    </span>
                   </div>
                   <p style={{ ...sans, fontSize: "15px", fontWeight: 600, color: FG, margin: "4px 0 5px" }}>{step.title}</p>
                   <p style={{ ...sans, fontSize: "13px", color: FG_MUT, lineHeight: 1.6, margin: 0 }}>{step.text}</p>

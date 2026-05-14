@@ -234,7 +234,16 @@ body {
 /* ── Hero float animation (used by Solution page cards) ── */
 @keyframes hero-float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ── Reduced motion — accessibility (P45) ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ── Orb drift animation (P36 — dark sections atmosphere) ── */

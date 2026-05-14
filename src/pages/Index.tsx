@@ -115,8 +115,8 @@ const Index = () => {
         >
           {/* Particle orbs */}
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-            <div style={{ position: "absolute", top: "-100px", left: "-80px", width: "500px", height: "500px", borderRadius: "50%", background: "rgba(59,158,255,0.18)", filter: "blur(105px)", willChange: "transform" }} />
-            <div style={{ position: "absolute", bottom: "-60px", right: "-60px", width: "350px", height: "350px", borderRadius: "50%", background: "rgba(26,86,219,0.14)", filter: "blur(115px)", willChange: "transform" }} />
+            <div style={{ position: "absolute", top: "-100px", left: "-80px", width: "500px", height: "500px", borderRadius: "50%", background: "rgba(59,158,255,0.32)", filter: "blur(105px)", willChange: "transform" }} />
+            <div style={{ position: "absolute", bottom: "-60px", right: "-60px", width: "350px", height: "350px", borderRadius: "50%", background: "rgba(26,86,219,0.22)", filter: "blur(115px)", willChange: "transform" }} />
           </div>
 
           <div
