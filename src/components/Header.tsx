@@ -6,6 +6,8 @@ const EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
 const Header = () => {
   const [isHidden, setIsHidden] = useState(false);
   const [atTop, setAtTop]       = useState(true);
+  const [onDark, setOnDark]     = useState(false);
+  const [scrollPct, setScrollPct] = useState(0);
   const lastScrollY             = useRef(0);
   const location                = useLocation();
 
@@ -19,8 +21,23 @@ const Header = () => {
         setIsHidden(false);
       }
       lastScrollY.current = y;
+
+      // P41 — scroll progress
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollPct(maxScroll > 0 ? (y / maxScroll) * 100 : 0);
+
+      // P39 — detect dark section under header
+      const headerY = 46; // ~center of header
+      const darkEls = document.querySelectorAll('[data-theme="dark"]');
+      let dark = false;
+      darkEls.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < headerY && rect.bottom > headerY) dark = true;
+      });
+      setOnDark(dark);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -42,11 +59,11 @@ const Header = () => {
         <div
           style={{
             height: "68px",
-            backgroundColor: atTop ? "transparent" : "rgba(225, 230, 238, 0.22)",
+            backgroundColor: atTop ? "transparent" : onDark ? "rgba(10,14,61,0.65)" : "rgba(225, 230, 238, 0.22)",
             backdropFilter: atTop ? "none" : "blur(28px)",
             WebkitBackdropFilter: atTop ? "none" : "blur(28px)",
             borderRadius: "18px",
-            border: atTop ? "none" : "0.5px solid rgba(255,255,255,0.60)",
+            border: atTop ? "none" : onDark ? "0.5px solid rgba(255,255,255,0.12)" : "0.5px solid rgba(255,255,255,0.60)",
             boxShadow: atTop ? "none" : "0 4px 24px rgba(0,0,0,0.06)",
             display: "flex",
             alignItems: "center",
@@ -76,8 +93,9 @@ const Header = () => {
                 fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
                 fontWeight: 600,
                 fontSize: "19px",
-                color: "#1A1D24",
+                color: onDark ? "rgba(255,255,255,0.90)" : "#1A1D24",
                 letterSpacing: "-0.4px",
+                transition: `color 300ms ${EASE}`,
               }}
             >
               MikeVirtualCoach
@@ -92,12 +110,12 @@ const Header = () => {
                 fontFamily: "'DM Serif Display', Georgia, serif",
                 fontSize: "32px",
                 fontWeight: 400,
-                color: "#1A1D24",
+                color: onDark ? "rgba(255,255,255,0.90)" : "#1A1D24",
                 textDecoration: "none",
                 padding: "6px 14px",
                 borderRadius: "10px",
                 letterSpacing: "-0.8px",
-                transition: `opacity 180ms ${EASE}`,
+                transition: `opacity 180ms ${EASE}, color 300ms ${EASE}`,
                 whiteSpace: "nowrap",
               }}
               onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.80"; }}
@@ -117,7 +135,7 @@ const Header = () => {
                   fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
                   fontSize: "16px",
                   fontWeight: 500,
-                  color: isActive("/about") ? "#1a1f2e" : "rgba(15,23,42,0.75)",
+                  color: onDark ? (isActive("/about") ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.65)") : (isActive("/about") ? "#1a1f2e" : "rgba(15,23,42,0.75)"),
                   textDecoration: "none",
                   padding: "6px 14px",
                   borderRadius: "10px",
@@ -165,6 +183,21 @@ const Header = () => {
           </div>
         </div>
       </header>
+
+      {/* P41 — Scroll progress bar */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          height: "2px",
+          width: `${scrollPct}%`,
+          backgroundColor: "#3B9EFF",
+          zIndex: 201,
+          transition: "width 50ms linear",
+          opacity: atTop ? 0 : 0.8,
+        }}
+      />
 
       <a
         href="#main"

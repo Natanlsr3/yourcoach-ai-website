@@ -117,7 +117,7 @@ const About = () => {
                   marginBottom: 24,
                 }}
               >
-                Révolutionner le bien-être hôtelier
+                Une conviction. Un produit. Une équipe.
               </h1>
               <p
                 style={{
@@ -128,8 +128,7 @@ const About = () => {
                   lineHeight: 1.6,
                 }}
               >
-                Née de la rencontre entre expertise IA et savoir-faire hôtelier,
-                YourCoach AI transforme l'expérience well-being des hôtels de luxe.
+                Nous construisons le coach virtuel que l'hôtellerie haut de gamme attendait.
               </p>
             </div>
           </div>
@@ -381,6 +380,7 @@ const About = () => {
         {/* ── CTA FINAL ───────────────────────────────────── */}
         <section style={{ padding: "0 40px 80px" }}>
           <div
+            className="mvc-dark-grain"
             style={{
               background: "#0A0E3D",
               borderRadius: 24,

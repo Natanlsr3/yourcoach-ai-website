@@ -6,7 +6,6 @@ const ROTATING_WORDS = [
   "aller plus loin",
   "performer au quotidien",
   "prendre soin de soi",
-  "s'entraîner sans se blesser",
   "ne jamais s'arrêter",
   "transformer son séjour",
   "progresser à son rythme",
@@ -58,12 +57,12 @@ const Hero = () => {
     ...(phase === "visible" && {
       opacity: 1,
       transform: "translateY(0)",
-      transition: "opacity 400ms ease, transform 400ms ease",
+      transition: "opacity 400ms cubic-bezier(0.4, 0, 0.2, 1), transform 400ms cubic-bezier(0.4, 0, 0.2, 1)",
     }),
     ...(phase === "exiting" && {
       opacity: 0,
       transform: "translateY(-8px)",
-      transition: "opacity 400ms ease, transform 400ms ease",
+      transition: "opacity 400ms cubic-bezier(0.4, 0, 0.2, 1), transform 400ms cubic-bezier(0.4, 0, 0.2, 1)",
     }),
     ...(phase === "entering" && {
       opacity: 0,
@@ -125,7 +124,7 @@ const Hero = () => {
             lineHeight: 1.6,
           }}
         >
-          La technologie et l'expertise humaine. Pour vous, vraiment.
+          Le bien-être n'a jamais été aussi accessible. Ni aussi personnel.
         </p>
 
         {/* CTA */}

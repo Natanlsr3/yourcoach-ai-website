@@ -152,6 +152,7 @@ const Avantages = () => {
         {/* CTA Section */}
         <section
           className="py-20"
+          className="mvc-dark-grain"
           style={{ background: "#0A0E3D", borderRadius: "24px", margin: "0 40px 80px" }}
         >
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">

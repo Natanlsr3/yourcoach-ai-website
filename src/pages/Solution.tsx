@@ -84,7 +84,7 @@ const introText: React.CSSProperties = {
 
 const btnPrimary: React.CSSProperties = {
   ...sans,
-  backgroundColor: "#0A0E3D",
+  backgroundColor: "#3B9EFF",
   color: "#ffffff",
   borderRadius: "28px",
   padding: "13px 28px",
@@ -126,11 +126,13 @@ const Solution = () => {
   const nextSectionRef = useRef<HTMLDivElement>(null);
   const metricsRef = useRef<HTMLDivElement>(null);
   const bloc1CardRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const location = useLocation();
   const [activeTab, setActiveTab]     = useState<Tab>("Hôtel");
   const [metricsVisible, setMetricsVisible] = useState(false);
   const [counters, setCounters] = useState([0, 0, 0, 0]);
+  const [videoPlaying, setVideoPlaying] = useState(true);
 
   // ─── Responsive ─────────────────────────────
   const [winW, setWinW] = useState(typeof window !== "undefined" ? window.innerWidth : 1280);
@@ -233,12 +235,12 @@ const Solution = () => {
         if (el) {
           const rect     = el.getBoundingClientRect();
           const scrolled = -rect.top;
-          // Pills animent sur les premiers 80vh de scroll (zone BLOC 1 uniquement)
-          const total    = window.innerHeight * 0.8;
+          // Pills animent sur les premiers 35vh de scroll (zone BLOC 1 uniquement)
+          const total    = window.innerHeight * 0.35;
           const progress = Math.max(0, Math.min(1, scrolled / total));
-          if      (progress >= 0.55) setVisibleItems(3);
-          else if (progress >= 0.38) setVisibleItems(2);
-          else if (progress >= 0.20) setVisibleItems(1);
+          if      (progress >= 0.30) setVisibleItems(3);
+          else if (progress >= 0.18) setVisibleItems(2);
+          else if (progress >= 0.08) setVisibleItems(1);
           else                       setVisibleItems(0);
           setTitleParallax(progress * -30);
           setSectionProgress(progress);
@@ -345,6 +347,25 @@ const Solution = () => {
     return () => observer.disconnect();
   }, []);
 
+  // P37 — Stagger fade-in sur grilles de cards (BLOCS 3, 4, 7)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0)";
+            observer.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll('[data-stagger]').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, [activeTab]);
+
   // Counter animation — défilement des chiffres
   useEffect(() => {
     if (!metricsVisible) return;
@@ -385,7 +406,7 @@ const Solution = () => {
   };
 
   return (
-    <div style={{ backgroundColor: BG, color: FG, minHeight: "100vh" }}>
+    <div style={{ background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #e8f0fe 100%)", backgroundAttachment: "fixed", color: FG, minHeight: "100vh" }}>
 
       {/* ── Overlay gradient plein écran ── */}
       {overlayCard && (
@@ -407,12 +428,11 @@ const Solution = () => {
         <div ref={selectorRef} style={{ position: "relative" }}>
 
         {/* ── BLOC 0 — Hero (sticky : le fond reste, le sélecteur glisse par-dessus) ── */}
-        <section style={{ position: "relative", zIndex: 1, paddingBottom: "15vh" }}>
+        <section style={{ position: "relative", zIndex: 1, paddingBottom: "5vh" }}>
 
-          {/* Fond ciel bleu — couvre toute la section (y compris le padding) */}
+          {/* Overlay fade au scroll — le gradient est maintenant sur le wrapper parent */}
           <div ref={heroBgRef} style={{
             position: "absolute", inset: 0,
-            background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #e8f0fe 100%)",
             willChange: "opacity",
           }} />
 
@@ -439,7 +459,7 @@ const Solution = () => {
                 maxWidth: isMobile ? "90%" : "400px",
                 lineHeight: 1.6,
                 margin: 0,
-              }}>La technologie et l'expertise humaine,<br />au service de votre performance.</p>
+              }}>L'IA et les meilleurs coachs,<br />réunis dans un seul service.</p>
             </div>
 
             {/* Grid 3 colonnes */}
@@ -495,9 +515,13 @@ const Solution = () => {
                   position: "relative",
                 }}>
                   <div style={{ position: "absolute", top: "14px", left: "50%", transform: "translateX(-50%)", width: "75px", height: "5px", background: "rgba(0,0,0,0.10)", borderRadius: "3px", zIndex: 2 }} />
-                  <img
-                    src="/mike_face.png"
-                    alt="YourCoach AI Coach"
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    src="/demo-video.mp4"
                     style={{
                       position: 'absolute',
                       inset: 0,
@@ -506,8 +530,6 @@ const Solution = () => {
                       objectFit: 'cover',
                       objectPosition: 'center center',
                       display: 'block',
-                      transform: 'scale(0.96)',
-                      transformOrigin: 'center bottom',
                     }}
                   />
                 </div>
@@ -552,57 +574,6 @@ const Solution = () => {
 
           </div>
 
-          {/* ── BANDEAU CHIFFRES CLÉS ── */}
-          <div
-            ref={metricsRef}
-            style={{
-              position: "relative",
-              zIndex: 1,
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: isMobile ? "24px 40px" : "64px",
-              padding: isMobile ? "40px 20px 32px" : "48px 40px 56px",
-            }}
-          >
-            {[
-              { prefix: "", suffix: "/7", counterIdx: 0, label: "Disponibilité", delay: 0 },
-              { prefix: "", suffix: "+",  counterIdx: 1, label: "Langues supportées", delay: 0.1 },
-              { prefix: "<", suffix: "h", counterIdx: 2, label: "Déploiement", delay: 0.2 },
-              { prefix: "", suffix: "",   counterIdx: 3, label: "Personnel requis", delay: 0.3 },
-            ].map((item) => (
-              <div
-                key={item.label}
-                style={{
-                  textAlign: "center",
-                  opacity: metricsVisible ? 1 : 0,
-                  transform: metricsVisible ? "translateY(0)" : "translateY(20px)",
-                  transition: `opacity 0.7s cubic-bezier(0.4,0,0.2,1) ${item.delay}s, transform 0.7s cubic-bezier(0.4,0,0.2,1) ${item.delay}s`,
-                }}
-              >
-                <p style={{
-                  ...serif,
-                  fontSize: "40px",
-                  color: "#0A0E3D",
-                  letterSpacing: "-1.5px",
-                  margin: "0 0 4px",
-                  lineHeight: 1,
-                }}>
-                  {item.prefix}{counters[item.counterIdx]}{item.suffix}
-                </p>
-                <p style={{
-                  ...sans,
-                  fontSize: "13px",
-                  color: FG_MUT,
-                  margin: 0,
-                  lineHeight: 1.4,
-                }}>
-                  {item.label}
-                </p>
-              </div>
-            ))}
-          </div>
-
           </div>{/* fin sticky */}
         </section>
 
@@ -610,7 +581,7 @@ const Solution = () => {
         /* ── Sélecteur V2 — cards cas d'usage avec expansion hover ── */
         <section ref={nextSectionRef} style={{
           width: "100%",
-          height: "65vh",
+          height: "72vh",
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
@@ -910,7 +881,7 @@ const Solution = () => {
         </div>{/* fin wrapper hero + sélecteur */}
 
         {/* ── Espacement après sélecteur ── */}
-        <div style={{ height: "120px" }} />
+        <div style={{ height: "60px" }} />
 
         {/* ── Contenu par onglet ── */}
         <div ref={contentRef}>
@@ -994,8 +965,8 @@ const Solution = () => {
                         transform: visibleItems > index
                           ? "translateY(0)"
                           : "translateY(16px)",
-                        transition: "opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1)",
-                        transitionDelay: `${index * 0.2}s`,
+                        transition: "opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1)",
+                        transitionDelay: `${index * 0.12}s`,
                       }}
                     >
                       <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#ffffff", flexShrink: 0 }} />
@@ -1019,13 +990,13 @@ const Solution = () => {
           </div>
 
         {/* Espace de scroll pour scaling carte + pills */}
-        <div style={{ height: "80vh" }} />
+        <div style={{ height: "35vh" }} />
 
         {/* ── BLOC 3 — "Notre solution" — sticky derrière BLOC 2, révélé quand BLOC 2 part ── */}
-        <section id="avantages" style={{ backgroundColor: "#F5F1EA", minHeight: "100vh", padding: "96px 80px", display: "flex", alignItems: "center", position: "sticky", top: 0, zIndex: 2 }}>
+        <section id="avantages" style={{ background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #e8f0fe 100%)", backgroundAttachment: "fixed", minHeight: "100vh", padding: "96px 80px", display: "flex", alignItems: "center", position: "sticky", top: 0, zIndex: 2 }}>
           <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
-            <span style={labelStyle}>Notre solution</span>
-            <h2 style={h2Style}>3 leviers business</h2>
+            <span style={labelStyle}>Pourquoi YourCoach AI</span>
+            <h2 style={h2Style}>L'approche YourCoach AI</h2>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginTop: "52px" }}>
               {[
@@ -1047,8 +1018,8 @@ const Solution = () => {
                   title: "Activation des revenus annexes",
                   text: "Upsell intelligent, cross-selling intégré. Chaque interaction devient une opportunité de valoriser vos services.",
                 },
-              ].map((item) => (
-                <div key={item.tag} style={glassCardLg}>
+              ].map((item, idx) => (
+                <div key={item.tag} data-stagger className="glass-card" style={{ ...glassCardLg, opacity: 0, transform: "translateY(20px)", transition: `opacity 0.5s cubic-bezier(0.4,0,0.2,1) ${idx * 80}ms, transform 0.5s cubic-bezier(0.4,0,0.2,1) ${idx * 80}ms` }}>
                   <span style={{ ...sans, borderRadius: "12px", padding: "4px 12px", fontSize: "11px", ...item.tagStyle }}>
                     {item.tag}
                   </span>
@@ -1063,6 +1034,8 @@ const Solution = () => {
         {/* ── BLOC 2 — "Le voyageur moderne" — foreground, glisse par-dessus BLOC 1 puis repart en révélant BLOC 3 ── */}
         <section
           ref={bloc2Ref}
+          className="mvc-dark-grain"
+          data-theme="dark"
           style={{
             background: "#0A0E3D",
             minHeight: "100vh",
@@ -1079,9 +1052,9 @@ const Solution = () => {
             marginTop: "-100vh",
           }}
         >
-          {/* Orbes décoratifs */}
-          <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "rgba(59,158,255,0.18)", filter: "blur(105px)", top: -100, left: -200, pointerEvents: "none", zIndex: 0 }} />
-          <div style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: "rgba(26,86,219,0.14)", filter: "blur(115px)", bottom: 0, right: -100, pointerEvents: "none", zIndex: 0 }} />
+          {/* Orbes décoratifs — animation lente P36 */}
+          <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "rgba(59,158,255,0.18)", filter: "blur(105px)", top: -100, left: -200, pointerEvents: "none", zIndex: 0, animation: "orb-drift-1 20s cubic-bezier(0.4,0,0.2,1) infinite", willChange: "transform" }} />
+          <div style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: "rgba(26,86,219,0.14)", filter: "blur(115px)", bottom: 0, right: -100, pointerEvents: "none", zIndex: 0, animation: "orb-drift-2 22s cubic-bezier(0.4,0,0.2,1) infinite", willChange: "transform" }} />
 
           {/* Contenu */}
           <div style={{ position: "relative", zIndex: 1, maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
@@ -1205,10 +1178,10 @@ const Solution = () => {
         {/* ── BLOC 4 — Technologie — fond pair ── */}
         <section style={{ backgroundColor: BG_ALT, padding: "96px 80px" }}>
           <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
-            <span style={labelStyle}>Technologie</span>
-            <h2 style={h2Style}>Une technologie avant-gardiste</h2>
+            <span style={labelStyle}>Comment ça fonctionne</span>
+            <h2 style={h2Style}>L'expertise derrière chaque séance</h2>
             <p style={introText}>
-              Les fonctionnalités qui font de YourCoach AI la solution de référence pour les établissements exigeants.
+              Les fondations techniques d'une expérience qui fonctionne.
             </p>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
@@ -1219,8 +1192,8 @@ const Solution = () => {
                 { title: "Support Multilingue", text: "Interface disponible en français, anglais, allemand, espagnol et italien." },
                 { title: "Accessible sur Mobile", text: "Application native iOS et Android. Vos clients utilisent leur propre smartphone." },
                 { title: "Analytiques Avancées", text: "Dashboard en temps réel pour suivre l'engagement, satisfaction client et ROI." },
-              ].map((item) => (
-                <div key={item.title} style={glassCard}>
+              ].map((item, idx) => (
+                <div key={item.title} data-stagger className="glass-card" style={{ ...glassCard, opacity: 0, transform: "translateY(20px)", transition: `opacity 0.5s cubic-bezier(0.4,0,0.2,1) ${idx * 80}ms, transform 0.5s cubic-bezier(0.4,0,0.2,1) ${idx * 80}ms` }}>
                   <p style={{ ...sans, fontSize: "14px", fontWeight: 600, color: FG, marginBottom: "8px", marginTop: 0 }}>{item.title}</p>
                   <p style={{ ...sans, fontSize: "13px", color: FG_MUT, lineHeight: 1.65, margin: 0 }}>{item.text}</p>
                 </div>
@@ -1311,27 +1284,37 @@ const Solution = () => {
                 {
                   tag: "35-40 ans · Actif",
                   name: "Alexandre",
+                  img: "/persona-alexandre.jpg",
                   situation: "Cadre en déplacement 3 jours. Veut maintenir sa routine de sport sans perdre sa progression.",
                   items: ["Programme force 45 min adapté à la salle", "Récupération post-vol", "Suivi de sa progression habituelle"],
                 },
                 {
                   tag: "65 ans · Bien-être",
                   name: "Michel",
+                  img: "/persona-michel.jpg",
                   situation: "Retraité en vacances avec sa femme. Veut rester en forme, sans se blesser, à son rythme.",
                   items: ["Mobilité douce quotidienne 20 min", "Conseils posture et prévention", "Programme adapté aux contraintes articulaires"],
                 },
                 {
                   tag: "50-55 ans · Découverte",
                   name: "Isabelle",
+                  img: "/persona-isabelle.jpg",
                   situation: "En vacances à l'hôtel, elle veut profiter d'une séance de stretching pour se détendre, mais ne sait pas par où commencer.",
                   items: ["Séance stretching débutant 20 min", "Guidage pas à pas avec démonstrations", "Conseils posture et respiration"],
                 },
               ].map((p) => (
-                <div key={p.name} style={{ ...glassCardLg, display: "flex", flexDirection: "column", gap: "16px" }}>
-                  <span style={{ ...sans, backgroundColor: "rgba(255,255,255,0.6)", border: "1px solid rgba(0,0,0,0.10)", borderRadius: "10px", padding: "3px 10px", fontSize: "11px", color: FG_MUT, alignSelf: "flex-start" }}>
-                    {p.tag}
-                  </span>
-                  <p style={{ ...serif, fontSize: "22px", color: FG, margin: 0 }}>{p.name}</p>
+                <div key={p.name} style={{ display: "flex", flexDirection: "column", overflow: "hidden", padding: 0, borderRadius: "24px", transition: "transform 0.3s cubic-bezier(0.4,0,0.2,1)", cursor: "default" }} onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; }}>
+                  <div style={{ width: "100%", aspectRatio: "3/4", overflow: "hidden", borderRadius: "24px", position: "relative" }}>
+                    <img src={p.img} alt={p.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }} />
+                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%)", pointerEvents: "none" }} />
+                    <div style={{ position: "absolute", bottom: "20px", left: "24px", right: "24px" }}>
+                      <p style={{ ...serif, fontSize: "24px", color: "#fff", margin: "0 0 6px" }}>{p.name}</p>
+                      <span style={{ ...sans, backgroundColor: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.20)", borderRadius: "20px", padding: "4px 14px", fontSize: "11px", color: "rgba(255,255,255,0.85)" }}>
+                        {p.tag}
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ padding: "20px 4px 0", display: "flex", flexDirection: "column", gap: "12px" }}>
                   <p style={{ ...sans, fontSize: "13px", color: FG_MUT, lineHeight: 1.6, margin: 0 }}>{p.situation}</p>
                   <div style={{ borderTop: "0.5px solid rgba(0,0,0,0.08)", margin: "4px 0" }} />
                   <p style={{ ...sans, fontSize: "11px", color: BLUE, textTransform: "uppercase", letterSpacing: "1px", margin: 0 }}>
@@ -1342,6 +1325,7 @@ const Solution = () => {
                       <li key={item} style={{ fontSize: "13px", color: FG_MUT, borderLeft: `2px solid ${BLUE}`, paddingLeft: "8px" }}>{item}</li>
                     ))}
                   </ul>
+                  </div>
                 </div>
               ))}
             </div>
@@ -1351,8 +1335,8 @@ const Solution = () => {
         {/* ── BLOC 7 — Résultats — fond impair ── */}
         <section style={{ backgroundColor: BG, padding: "96px 80px" }}>
           <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
-            <span style={labelStyle}>Résultats</span>
-            <h2 style={h2Style}>Des résultats mesurables dès les premières semaines</h2>
+            <span style={labelStyle}>Impact mesurable</span>
+            <h2 style={h2Style}>Des effets visibles, sans effort supplémentaire</h2>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px", marginTop: "52px" }}>
               {[
@@ -1362,7 +1346,7 @@ const Solution = () => {
                 { title: "Image différenciante", text: "Positionnez-vous comme précurseur des services bien-être digitaux. Avantage concurrentiel réel." },
                 { title: "Aucune charge opérationnelle", text: "Fonctionne en totale autonomie. Pas de personnel dédié, pas d'équipement supplémentaire." },
               ].map((item, idx) => (
-                <div key={item.title} style={{ ...glassCard, ...(idx === 4 ? { gridColumn: "1 / -1", maxWidth: "50%", margin: "0 auto", width: "100%" } : {}) }}>
+                <div key={item.title} data-stagger className="glass-card" style={{ ...glassCard, opacity: 0, transform: "translateY(20px)", transition: `opacity 0.5s cubic-bezier(0.4,0,0.2,1) ${idx * 80}ms, transform 0.5s cubic-bezier(0.4,0,0.2,1) ${idx * 80}ms`, ...(idx === 4 ? { gridColumn: "1 / -1", maxWidth: "50%", margin: "0 auto", width: "100%" } : {}) }}>
                   <p style={{ ...sans, fontSize: "15px", fontWeight: 600, color: FG, marginBottom: "8px", marginTop: 0 }}>{item.title}</p>
                   <p style={{ ...sans, fontSize: "13px", color: FG_MUT, lineHeight: 1.65, margin: 0 }}>{item.text}</p>
                 </div>
@@ -1370,6 +1354,55 @@ const Solution = () => {
             </div>
           </div>
         </section>
+
+        {/* ── BANDEAU CHIFFRES CLÉS — sous Résultats ── */}
+        <div
+          ref={metricsRef}
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: isMobile ? "24px 40px" : "64px",
+            padding: isMobile ? "40px 20px 32px" : "56px 40px 64px",
+          }}
+        >
+          {[
+            { prefix: "", suffix: "/7", counterIdx: 0, label: "Disponibilité", delay: 0 },
+            { prefix: "", suffix: "+",  counterIdx: 1, label: "Langues supportées", delay: 0.1 },
+            { prefix: "<", suffix: "h", counterIdx: 2, label: "Déploiement", delay: 0.2 },
+            { prefix: "", suffix: "",   counterIdx: 3, label: "Personnel requis", delay: 0.3 },
+          ].map((item) => (
+            <div
+              key={item.label}
+              style={{
+                textAlign: "center",
+                opacity: metricsVisible ? 1 : 0,
+                transform: metricsVisible ? "translateY(0)" : "translateY(20px)",
+                transition: `opacity 0.7s cubic-bezier(0.4,0,0.2,1) ${item.delay}s, transform 0.7s cubic-bezier(0.4,0,0.2,1) ${item.delay}s`,
+              }}
+            >
+              <p style={{
+                ...serif,
+                fontSize: "40px",
+                color: "#0A0E3D",
+                letterSpacing: "-1.5px",
+                margin: "0 0 4px",
+                lineHeight: 1,
+              }}>
+                {item.prefix}{counters[item.counterIdx]}{item.suffix}
+              </p>
+              <p style={{
+                ...sans,
+                fontSize: "13px",
+                color: FG_MUT,
+                margin: 0,
+                lineHeight: 1.4,
+              }}>
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
 
         {/* ── BLOC 8 — Process — fond pair ── */}
         <section style={{ backgroundColor: BG_ALT, padding: "96px 80px" }}>
@@ -1412,6 +1445,70 @@ const Solution = () => {
           </div>
         </section>
 
+        {/* ── FAQ ── */}
+        <section style={{ backgroundColor: "transparent", padding: "96px 80px" }}>
+          <div style={{ maxWidth: "720px", margin: "0 auto" }}>
+            <span style={labelStyle}>Questions fréquentes</span>
+            <h2 style={h2Style}>Tout ce que vous devez savoir</h2>
+            <div style={{ marginTop: "48px", display: "flex", flexDirection: "column", gap: "0" }}>
+              {[
+                {
+                  q: "L'installation nécessite-t-elle des travaux ou du matériel ?",
+                  a: "Non. YourCoach AI fonctionne sur les smartphones de vos clients. Aucun équipement, aucune installation physique. Un simple QR code dans vos espaces suffit."
+                },
+                {
+                  q: "Les séances sont-elles adaptées à tous les niveaux ?",
+                  a: "Oui. L'IA adapte chaque séance au profil, au niveau de forme, aux contraintes physiques et aux objectifs de chaque utilisateur — du débutant au sportif confirmé."
+                },
+                {
+                  q: "En combien de temps le service est-il opérationnel ?",
+                  a: "24 heures. Nous configurons votre environnement, personnalisons l'interface à votre marque, et déployons les QR codes. Votre équipe est formée en une session."
+                },
+                {
+                  q: "Le coach est-il disponible en plusieurs langues ?",
+                  a: "Oui. YourCoach AI est disponible en français, anglais, allemand, espagnol et italien — idéal pour une clientèle internationale."
+                },
+                {
+                  q: "Quel engagement est requis ?",
+                  a: "Aucun engagement longue durée. Nous proposons des formules flexibles, adaptées à la saisonnalité et à la taille de votre établissement."
+                },
+              ].map((item, idx) => {
+                const faqId = `faq-${idx}`;
+                return (
+                  <details
+                    key={idx}
+                    style={{
+                      borderTop: idx === 0 ? "0.5px solid rgba(0,0,0,0.08)" : "none",
+                      borderBottom: "0.5px solid rgba(0,0,0,0.08)",
+                    }}
+                  >
+                    <summary
+                      style={{
+                        ...sans,
+                        fontSize: "15px",
+                        fontWeight: 600,
+                        color: FG,
+                        padding: "20px 0",
+                        cursor: "pointer",
+                        listStyle: "none",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      {item.q}
+                      <span style={{ fontSize: "20px", color: FG_MUT, flexShrink: 0, marginLeft: "16px", transition: "transform 0.2s" }}>+</span>
+                    </summary>
+                    <p style={{ ...sans, fontSize: "14px", color: FG_MUT, lineHeight: 1.7, margin: "0 0 20px", paddingRight: "40px" }}>
+                      {item.a}
+                    </p>
+                  </details>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* ── BLOC 9 — CTA final — glassmorphism ── */}
         <section
           style={{
@@ -1431,10 +1528,10 @@ const Solution = () => {
             margin: "0 auto",
           }}>
             <h2 style={{ ...serif, fontSize: "52px", color: FG, letterSpacing: "-2px", lineHeight: 1.05, margin: 0 }}>
-              Prêt à transformer votre expérience wellness ?
+              Parlons de votre établissement
             </h2>
             <p style={{ ...sans, fontSize: "16px", color: FG_MUT, marginTop: "16px", marginBottom: "48px" }}>
-              Discutons de votre établissement. Call de découverte gratuit, sans engagement.
+              Un échange confidentiel, sans engagement.
             </p>
             <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
               <Link to="/contact" style={btnPrimary}>
@@ -1596,6 +1693,42 @@ const Solution = () => {
 
       </main>
       <Footer />
+
+      {/* Bouton stop vidéo — discret, bas droite */}
+      <button
+        onClick={() => {
+          const v = videoRef.current;
+          if (!v) return;
+          if (v.paused) { v.play(); setVideoPlaying(true); }
+          else { v.pause(); setVideoPlaying(false); }
+        }}
+        aria-label={videoPlaying ? "Mettre en pause la vidéo" : "Reprendre la vidéo"}
+        style={{
+          position: "fixed",
+          bottom: "24px",
+          right: "24px",
+          width: "36px",
+          height: "36px",
+          borderRadius: "50%",
+          background: "rgba(10,14,61,0.45)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(255,255,255,0.12)",
+          color: "rgba(255,255,255,0.7)",
+          fontSize: "14px",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 50,
+          transition: "opacity 0.3s",
+          opacity: 0.5,
+        }}
+        onMouseEnter={e => (e.currentTarget.style.opacity = "1")}
+        onMouseLeave={e => (e.currentTarget.style.opacity = "0.5")}
+      >
+        {videoPlaying ? "❚❚" : "▶"}
+      </button>
     </div>
   );
 };

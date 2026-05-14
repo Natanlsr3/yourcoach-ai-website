@@ -98,6 +98,8 @@ const Index = () => {
 
         {/* BANDEAU 2 — Transition immersive */}
         <section
+          className="mvc-dark-grain"
+          data-theme="dark"
           style={{
             backgroundColor: "#0A0E3D",
             height: "100vh",
@@ -130,7 +132,7 @@ const Index = () => {
             }}
           >
             <span style={{ ...labelStyle, color: "rgba(255,255,255,0.35)" }}>
-              Notre vision
+              Vision
             </span>
             <h2
               style={{
@@ -169,7 +171,7 @@ const Index = () => {
         >
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
             <span style={{ ...labelStyle, color: BLUE }}>
-              Technologie &amp; Expertise
+              Comment ça fonctionne
             </span>
             <h2 style={serifTitle(44)}>
               Capter ce qui compte. Analyser. Agir.
@@ -347,80 +349,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* BANDEAU 4 — Les profils (masqué) */}
-        <section
-          style={{
-            display: "none",
-            background: "transparent",
-            padding: "120px 80px",
-          }}
-        >
-          <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-            <span style={{ ...labelStyle, color: "rgba(30,80,180,0.55)" }}>
-              Chaque personne est différente
-            </span>
-            <h2
-              style={{
-                fontFamily: "'DM Serif Display', Georgia, serif",
-                fontSize: "44px",
-                color: "#1A1D24",
-                lineHeight: 1.1,
-                letterSpacing: "-1px",
-                marginBottom: "24px",
-              }}
-            >
-              Pas un programme. Le vôtre.
-            </h2>
-            <p
-              style={{
-                fontSize: "16px",
-                color: "rgba(15,23,42,0.5)",
-                maxWidth: "480px",
-                lineHeight: 1.7,
-                marginBottom: "64px",
-              }}
-            >
-              Votre passé, vos objectifs, vos limites, votre personnalité. Tout compte.
-            </p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 0, marginTop: "0", maxWidth: "800px" }}>
-              {[
-                {
-                  num: "01",
-                  name: "Thomas, 34 ans",
-                  text: "Reprise après opération du genou. Objectif : retrouver le trail.",
-                },
-                {
-                  num: "02",
-                  name: "Sarah, 28 ans",
-                  text: "Préparation semi-marathon. Gestion du stress et de la nutrition.",
-                },
-                {
-                  num: "03",
-                  name: "Marc, 52 ans",
-                  text: "Prévention et longévité. Garder la forme, vieillir mieux.",
-                },
-              ].map((card, i) => (
-                <div
-                  key={card.name}
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    gap: "32px",
-                    padding: "28px 0",
-                    borderBottom: "0.5px solid rgba(0,0,0,0.08)",
-                    borderTop: i === 0 ? "0.5px solid rgba(0,0,0,0.08)" : "none",
-                  }}
-                >
-                  <span style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "80px", color: "rgba(15,23,42,0.06)", lineHeight: 1, flexShrink: 0, width: "80px", display: "block" }}>{card.num}</span>
-                  <p style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "28px", color: "#1A1D24", flexShrink: 0, width: "220px", margin: 0, lineHeight: 1.2 }}>{card.name}</p>
-                  <p style={{ fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif", fontSize: "15px", color: "rgba(15,23,42,0.48)", lineHeight: 1.65, flex: 1, margin: 0 }}>{card.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* BANDEAU 5 — Teaser YourCoach AI */}
         {/* TODO: visuel produit, ambiance finale */}
         <section
@@ -477,7 +405,7 @@ const Index = () => {
                 e.currentTarget.style.transform = "translateY(0)";
               }}
               style={{
-                backgroundColor: "#0A0E3D",
+                backgroundColor: "#3B9EFF",
                 color: "#fff",
                 borderRadius: "28px",
                 padding: "13px 28px",

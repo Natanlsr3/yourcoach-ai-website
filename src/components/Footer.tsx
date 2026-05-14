@@ -29,7 +29,7 @@ const Footer = () => {
 
   return (
     <footer style={{ margin: "0 24px 24px", fontFamily: sans }}>
-      <div style={{
+      <div className="mvc-dark-grain" style={{
         background: "#0A0E3D",
         borderRadius: "24px",
         overflow: "hidden",
@@ -152,7 +152,7 @@ const Footer = () => {
             gap: "12px",
           }}>
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "13px", margin: 0 }}>
-              © 2024 YourCoach AI. Tous droits réservés. — édité par MikeVirtualCoach (SAS)
+              © {new Date().getFullYear()} YourCoach AI. Tous droits réservés.
             </p>
             <div style={{ display: "flex", gap: "24px" }}>
               {[
