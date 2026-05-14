@@ -74,7 +74,7 @@ const Hero = () => {
   return (
     <section
       style={{
-        background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #e8f0fe 100%)",
+        background: "linear-gradient(90deg, #dceffe 0%, #f0ece5 50%, #faeadb 100%)",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",

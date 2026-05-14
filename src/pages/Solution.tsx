@@ -133,6 +133,8 @@ const Solution = () => {
   const [metricsVisible, setMetricsVisible] = useState(false);
   const [counters, setCounters] = useState([0, 0, 0, 0]);
   const [videoPlaying, setVideoPlaying] = useState(true);
+  const [phoneProgress, setPhoneProgress] = useState(0);
+  const phoneRef = useRef<HTMLDivElement>(null);
 
   // ─── Responsive ─────────────────────────────
   const [winW, setWinW] = useState(typeof window !== "undefined" ? window.innerWidth : 1280);
@@ -143,6 +145,26 @@ const Solution = () => {
   }, []);
   const isMobile = winW < 768;
   const isCompact = winW < 1100;
+
+  // Phone 3D reveal — scroll-driven continuous mapping
+  useEffect(() => {
+    const el = phoneRef.current;
+    if (!el) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const rect = el.getBoundingClientRect();
+        const vh = window.innerHeight;
+        // progress: 0 when top of phone enters bottom of viewport, 1 when it reaches ~40% from top
+        const raw = 1 - (rect.top - vh * 0.1) / (vh * 0.7);
+        setPhoneProgress(Math.min(1, Math.max(0, raw)));
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
+  }, []);
 
   // Si on arrive avec #avantages (ou hashchange en cours de page), forcer Hôtel + scroll
   useEffect(() => {
@@ -406,7 +428,7 @@ const Solution = () => {
   };
 
   return (
-    <div style={{ background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #e8f0fe 100%)", backgroundAttachment: "fixed", color: FG, minHeight: "100vh" }}>
+    <div style={{ background: "linear-gradient(90deg, #dceffe 0%, #f0ece5 50%, #faeadb 100%)", backgroundAttachment: "fixed", color: FG, minHeight: "100vh" }}>
 
       {/* ── Overlay gradient plein écran ── */}
       {overlayCard && (
@@ -466,7 +488,7 @@ const Solution = () => {
             <div style={{ display: isCompact ? "flex" : "grid", flexDirection: isCompact ? "column" : undefined, gridTemplateColumns: isCompact ? undefined : "1fr auto 1fr", alignItems: "center", gap: isMobile ? "24px" : isCompact ? "32px" : "52px", width: "100%", maxWidth: "1340px", margin: "0 auto", padding: isCompact ? "0 20px" : undefined }}>
 
               {/* Colonne gauche */}
-              <div style={{ order: isCompact ? 2 : undefined, display: "flex", flexDirection: isCompact ? (isMobile ? "column" : "row") : "column", justifyContent: "center", gap: isCompact ? "16px" : "28px", alignItems: isCompact ? "stretch" : "flex-end", height: isCompact ? "auto" : "600px", width: isCompact ? "100%" : undefined }}>
+              <div style={{ order: isCompact ? 2 : undefined, display: "flex", flexDirection: isCompact ? (isMobile ? "column" : "row") : "column", justifyContent: "center", gap: isCompact ? "16px" : "28px", alignItems: isCompact ? "stretch" : "flex-end", height: isCompact ? "auto" : "680px", width: isCompact ? "100%" : undefined }}>
 
                 <div style={{ width: isCompact ? undefined : "350px", maxWidth: "350px", flex: isCompact ? "1 1 0" : undefined, borderRadius: "22px", padding: isCompact ? "24px" : "28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
@@ -503,16 +525,21 @@ const Solution = () => {
               </div>
 
               {/* Colonne centrale — smartphone */}
-              <div style={{ order: isCompact ? 1 : undefined, display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <div ref={phoneRef} style={{ order: isCompact ? 1 : undefined, display: "flex", justifyContent: "center", alignItems: "center", position: "relative", perspective: "1200px" }}>
                 <div style={{
-                  width: isMobile ? "220px" : isCompact ? "260px" : "300px",
-                  height: isMobile ? "440px" : isCompact ? "520px" : "600px",
+                  width: isMobile ? "240px" : isCompact ? "280px" : "340px",
+                  height: isMobile ? "480px" : isCompact ? "560px" : "680px",
                   background: "#f4f4f2",
                   borderRadius: "50px",
                   border: "8px solid #1a1a1a",
-                  boxShadow: "0 0 0 1px rgba(0,0,0,0.15), 0 40px 80px rgba(0,0,0,0.20)",
+                  boxShadow: `${-(1 - phoneProgress) * 20}px ${(1 - phoneProgress) * 15 + 20}px ${40 + phoneProgress * 30}px rgba(0,0,0,${0.15 + phoneProgress * 0.08})`,
                   overflow: "hidden",
                   position: "relative",
+                  transform: `rotateY(${-35 * (1 - phoneProgress)}deg) rotateX(${12 * (1 - phoneProgress)}deg) scale(${0.85 + 0.15 * phoneProgress}) translateY(${50 * (1 - phoneProgress)}px)`,
+                  opacity: 0.4 + 0.6 * phoneProgress,
+                  willChange: "transform",
+                  transformStyle: "preserve-3d",
+                  backfaceVisibility: "hidden",
                 }}>
                   <div style={{ position: "absolute", top: "14px", left: "50%", transform: "translateX(-50%)", width: "75px", height: "5px", background: "rgba(0,0,0,0.10)", borderRadius: "3px", zIndex: 2 }} />
                   <video
@@ -533,10 +560,37 @@ const Solution = () => {
                     }}
                   />
                 </div>
+                {/* Bouton pause/play — minimaliste, sous le phone à droite */}
+                <button
+                  onClick={() => {
+                    const v = videoRef.current;
+                    if (!v) return;
+                    if (v.paused) { v.play(); setVideoPlaying(true); }
+                    else { v.pause(); setVideoPlaying(false); }
+                  }}
+                  aria-label={videoPlaying ? "Pause" : "Play"}
+                  style={{
+                    position: "absolute",
+                    bottom: "-32px",
+                    right: "-100px",
+                    background: "none",
+                    border: "none",
+                    color: "rgba(255,255,255,0.55)",
+                    fontSize: "18px",
+                    cursor: "pointer",
+                    padding: 0,
+                    lineHeight: 1,
+                    transition: "color 0.2s",
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.9)")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}
+                >
+                  {videoPlaying ? "❚❚" : "▶"}
+                </button>
               </div>
 
               {/* Colonne droite */}
-              <div style={{ order: isCompact ? 3 : undefined, display: "flex", flexDirection: isCompact ? (isMobile ? "column" : "row") : "column", justifyContent: "center", gap: isCompact ? "16px" : "28px", alignItems: isCompact ? "stretch" : "flex-start", height: isCompact ? "auto" : "600px", width: isCompact ? "100%" : undefined }}>
+              <div style={{ order: isCompact ? 3 : undefined, display: "flex", flexDirection: isCompact ? (isMobile ? "column" : "row") : "column", justifyContent: "center", gap: isCompact ? "16px" : "28px", alignItems: isCompact ? "stretch" : "flex-start", height: isCompact ? "auto" : "680px", width: isCompact ? "100%" : undefined }}>
 
                 <div style={{ width: isCompact ? undefined : "350px", maxWidth: "350px", flex: isCompact ? "1 1 0" : undefined, borderRadius: "22px", padding: isCompact ? "24px" : "28px",
                   background: "rgba(255,255,255,0.62)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
@@ -993,7 +1047,7 @@ const Solution = () => {
         <div style={{ height: "35vh" }} />
 
         {/* ── BLOC 3 — "Notre solution" — sticky derrière BLOC 2, révélé quand BLOC 2 part ── */}
-        <section id="avantages" style={{ background: "linear-gradient(145deg, #dceffe 0%, #f0ece5 50%, #e8f0fe 100%)", backgroundAttachment: "fixed", minHeight: "100vh", padding: "96px 80px", display: "flex", alignItems: "center", position: "sticky", top: 0, zIndex: 2 }}>
+        <section id="avantages" style={{ background: "linear-gradient(90deg, #dceffe 0%, #f0ece5 50%, #faeadb 100%)", backgroundAttachment: "fixed", minHeight: "100vh", padding: "96px 80px", display: "flex", alignItems: "center", position: "sticky", top: 0, zIndex: 2 }}>
           <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
             <span style={labelStyle}>Pourquoi YourCoach AI</span>
             <h2 style={h2Style}>L'approche YourCoach AI</h2>
@@ -1701,41 +1755,6 @@ const Solution = () => {
       </main>
       <Footer />
 
-      {/* Bouton stop vidéo — discret, bas droite */}
-      <button
-        onClick={() => {
-          const v = videoRef.current;
-          if (!v) return;
-          if (v.paused) { v.play(); setVideoPlaying(true); }
-          else { v.pause(); setVideoPlaying(false); }
-        }}
-        aria-label={videoPlaying ? "Mettre en pause la vidéo" : "Reprendre la vidéo"}
-        style={{
-          position: "fixed",
-          bottom: "24px",
-          right: "24px",
-          width: "36px",
-          height: "36px",
-          borderRadius: "50%",
-          background: "rgba(10,14,61,0.45)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          border: "1px solid rgba(255,255,255,0.12)",
-          color: "rgba(255,255,255,0.7)",
-          fontSize: "14px",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 50,
-          transition: "opacity 0.3s",
-          opacity: 0.5,
-        }}
-        onMouseEnter={e => (e.currentTarget.style.opacity = "1")}
-        onMouseLeave={e => (e.currentTarget.style.opacity = "0.5")}
-      >
-        {videoPlaying ? "❚❚" : "▶"}
-      </button>
     </div>
   );
 };
