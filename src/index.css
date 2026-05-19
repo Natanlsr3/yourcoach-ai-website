@@ -8,6 +8,14 @@
 
 @layer base {
   :root {
+    /* Section spacing */
+    --section-gap-lg: 120px;
+    --section-gap-md: 96px;
+    --section-gap-sm: 64px;
+
+    /* Standardized easing */
+    --mvc-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
     /* Fonds */
     --background: 36 20% 97%;          /* #f9f7f4 crème très clair */
     --background-alt: 36 15% 94%;      /* #f0ece5 crème légèrement plus sombre */
@@ -26,11 +34,11 @@
     --primary-light: 210 90% 72%;
     --primary-pale: 210 80% 93%;
 
-    /* Accent — Beige/orangé chaud */
-    --accent: 28 75% 58%;              /* #e07a35 orangé chaud */
+    /* Accent — Bleu profond */
+    --accent: 210 85% 58%;             /* #3b9eff bleu — aligné primary */
     --accent-foreground: 0 0% 100%;
-    --accent-light: 28 80% 68%;
-    --accent-pale: 28 70% 93%;
+    --accent-light: 210 90% 72%;
+    --accent-pale: 210 80% 93%;
 
     /* Neutres */
     --secondary: 36 20% 94%;
@@ -46,7 +54,7 @@
     /* Gradients */
     --gradient-hero: linear-gradient(145deg, hsl(210 80% 93%) 0%, hsl(36 50% 94%) 50%, hsl(28 60% 93%) 100%);
     --gradient-primary: linear-gradient(135deg, hsl(210 85% 58%) 0%, hsl(210 90% 68%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(28 75% 58%) 0%, hsl(28 80% 68%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(210 85% 58%) 0%, hsl(210 90% 68%) 100%);
 
     /* Glassmorphism — fond clair */
     --glass-bg: rgba(255, 255, 255, 0.55);
@@ -58,7 +66,7 @@
     --shadow-soft: 0 4px 20px rgba(60, 100, 180, 0.08);
     --shadow-medium: 0 8px 32px rgba(60, 100, 180, 0.12);
     --shadow-strong: 0 20px 60px rgba(60, 100, 180, 0.16);
-    --shadow-accent: 0 8px 30px rgba(224, 122, 53, 0.25);
+    --shadow-accent: 0 8px 30px rgba(59, 158, 255, 0.25);
 
     --radius: 0.75rem;
 
@@ -129,10 +137,10 @@
 /* ── Canvas gradient global — fond continu ───────────────── */
 body {
   background: linear-gradient(
-    145deg,
+    90deg,
     #dceffe 0%,
-    #f0ece5 50%,
-    #faeadb 100%
+    #e8f1ff 50%,
+    #dceffe 100%
   );
   background-attachment: fixed;
   background-size: 100% 100%;
@@ -154,11 +162,12 @@ body {
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   border-radius: 18px;
-  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 .glass-card:hover {
   box-shadow: 0 12px 40px rgba(60, 100, 180, 0.15);
   border-color: rgba(255,255,255,0.95);
+  transform: translateY(-2px);
 }
 
 /* Glass card bleue */
@@ -171,13 +180,13 @@ body {
   border-radius: 18px;
 }
 
-/* Glass card orangée */
+/* Glass card secondaire — bleu subtil (remplace l'ancienne warm orange) */
 .glass-card-warm {
-  background: rgba(224, 122, 53, 0.07);
+  background: rgba(59, 158, 255, 0.06);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid rgba(224, 122, 53, 0.20);
-  box-shadow: 0 8px 32px rgba(224, 122, 53, 0.08);
+  border: 1px solid rgba(59, 158, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(59, 158, 255, 0.08);
   border-radius: 18px;
 }
 
@@ -203,9 +212,9 @@ body {
 }
 
 .pill-warm {
-  background: rgba(224, 122, 53, 0.10);
-  border-color: rgba(224, 122, 53, 0.25);
-  color: hsl(28 75% 38%);
+  background: rgba(59, 158, 255, 0.10);
+  border-color: rgba(59, 158, 255, 0.25);
+  color: hsl(210 85% 40%);
 }
 
 /* Section label */
@@ -228,8 +237,85 @@ body {
   color: hsl(220 15% 12%);
 }
 
+/* ── Grain overlay for dark sections ── */
+.mvc-dark-section {
+  position: relative;
+}
+.mvc-dark-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── P05 — Responsive 5-column grid ── */
+.grid-5-responsive {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+@media (max-width: 1024px) {
+  .grid-5-responsive {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .grid-5-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* P05 — Responsive padding for tech section */
+.section-tech-responsive {
+  padding: 120px 80px;
+}
+@media (max-width: 640px) {
+  .section-tech-responsive {
+    padding: 80px 24px;
+  }
+}
+
+/* ── Orb drift animation ── */
+@keyframes orb-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(12px, -8px); }
+}
+
+/* ── P14 — Responsive Solution hero grid ── */
+.solution-hero-grid {
+  display: grid;
+  grid-template-columns: 380px auto 380px;
+  align-items: center;
+  gap: 52px;
+  width: 100%;
+  max-width: 1340px;
+  margin: 0 auto;
+}
+@media (max-width: 1024px) {
+  .solution-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 0 24px;
+  }
+  .solution-hero-side-col {
+    display: none !important;
+  }
+}
+
+.solution-hero-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(40px, 8vw, 82px);
+  color: #0A0E3D;
+  letter-spacing: -3.5px;
+  line-height: 1.0;
+  margin: 0 0 16px;
+}
+
 /* ── Hero float animation (used by Solution page cards) ── */
 @keyframes hero-float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-6px); }
 }
